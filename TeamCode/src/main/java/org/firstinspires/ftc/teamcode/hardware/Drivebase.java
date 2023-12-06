@@ -19,11 +19,14 @@ import org.firstinspires.ftc.teamcode.Api;
  */
 public class Drivebase {
     private final DcMotor frdrive;
+
     private final DcMotor fldrive;
     private final DcMotor brdrive;
     private final DcMotor bldrive;
     private final IMU imu;
     private final Supplier<Boolean> opModeIsActive;
+
+
 
     /**
      * Uses `hardwareMap` to initialize the motors and imu.
@@ -72,6 +75,27 @@ public class Drivebase {
         telemetry.addData("BRDrive", brdrive.getCurrentPosition());
         telemetry.addData("Heading", getHeading());
         telemetry.update();
+    }
+
+    /**
+     * For use wherever.
+     *
+     * This calls upon the encoders of the drivebase to clear.
+     * Called before waitForStart(); after drivebase init.
+     *
+     * Asks for you to pass a drivetype after clearing Encoders
+     */
+
+    public @Api void clearEncoder(DcMotor.RunMode choice) {
+        frdrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fldrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brdrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bldrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // -----------------------------------------------------
+        frdrive.setMode(choice);
+        fldrive.setMode(choice);
+        brdrive.setMode(choice);
+        bldrive.setMode(choice);
     }
 
 

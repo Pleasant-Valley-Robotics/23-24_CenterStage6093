@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 public class BasicAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
-        telemetry.setAutoClear(false);
+        // ALWAYS SET TELEMETRY AUTOCLEAR to TRUE!!!
+        telemetry.setAutoClear(true);
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
