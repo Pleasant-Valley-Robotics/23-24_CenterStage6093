@@ -59,7 +59,13 @@ public class Drivebase {
         brdrive.setMode(mode);
     }
 
-    private void addTelemetry(Telemetry telemetry) {
+    /**
+     * Adds the position of all the motors and the current heading to telemetry.
+     * Note that this is already called for you in auto, so you should only be calling this in teleop.
+     *
+     * @param telemetry The telemetry board to add the data to.
+     */
+    public @Api void addTelemetry(Telemetry telemetry) {
         telemetry.addData("FLDrive", fldrive.getCurrentPosition());
         telemetry.addData("FRDrive", frdrive.getCurrentPosition());
         telemetry.addData("BLDrive", bldrive.getCurrentPosition());
@@ -72,9 +78,9 @@ public class Drivebase {
     /**
      * For use in teleop, controlled by a controller.
      *
-     * @param yInput    Driving input. Negative is back, positive is forward. `[-1, 1]`.
-     * @param xInput    Strafing input. Negative is left, positive is right. `[-1, 1]`.
-     * @param turnInput Turning input. Negative is ccw, positive is clockwise. `[-1, 1]`.
+     * @param yInput    Driving input. Negative is back, positive is forward. [-1, 1].
+     * @param xInput    Strafing input. Negative is left, positive is right. [-1, 1].
+     * @param turnInput Turning input. Negative is ccw, positive is clockwise. [-1, 1].
      */
     public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
         double frontLeft = yInput + xInput + turnInput;
@@ -95,7 +101,7 @@ public class Drivebase {
      * For use in auto. Drives forward a specified distance, using the encoders.
      *
      * @param inches    The amount of inches to drive forward, negative is backwards.
-     * @param power     How fast to drive. `(0, 1]`.
+     * @param power     How fast to drive. (0, 1].
      * @param telemetry Pass telemetry if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#turnAngle
@@ -130,7 +136,7 @@ public class Drivebase {
      * For use in auto. Strafes sideways a specified amount of inches, using encoders.
      *
      * @param inches    How many inches to strafe, negative is left.
-     * @param power     How fast to strafe. `(0, 1]`.
+     * @param power     How fast to strafe. (0, 1].
      * @param telemetry Pass this if you want the method to log to telemetry.
      * @see Drivebase#driveForward
      * @see Drivebase#turnAngle
@@ -164,8 +170,8 @@ public class Drivebase {
     /**
      * For auto. Turns to a specified angle, without resetting the heading.
      *
-     * @param angle     How many degrees to turn. `[-180, 180]`.
-     * @param power     How fast to turn. `(0, 1]`.
+     * @param angle     How many degrees to turn. [-180, 180].
+     * @param power     How fast to turn. (0, 1].
      * @param telemetry Pass this if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#driveForward
@@ -200,8 +206,8 @@ public class Drivebase {
     /**
      * For auto. Turns a specified angle in degrees, as an offset from the current heading.
      *
-     * @param angle     How many degrees to turn. `[-180, 180]`.
-     * @param power     How fast to turn. `(0, 1]`.
+     * @param angle     How many degrees to turn. [-180, 180].
+     * @param power     How fast to turn. (0, 1].
      * @param telemetry Pass this if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#driveForward
