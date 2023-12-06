@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.Config.ENCODER_PER_INCH;
 
@@ -9,8 +9,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Api;
 
 /**
  * Class that contains the entire drivebase for the robot. Contains methods to move the robot both in auto and in teleop.
@@ -21,18 +23,21 @@ public class Drivebase {
     private final DcMotor brdrive;
     private final DcMotor bldrive;
     private final IMU imu;
+    private final Supplier<Boolean> opModeIsActive;
 
     /**
      * Uses `hardwareMap` to initialize the motors and imu.
      *
-     * @param hardwareMap The hardware map to use for initialization.
+     * @param hardwareMap    The hardware map to use for initialization.
+     * @param opModeIsActive Supplier that returns false if the program needs to stop.
      */
-    public @Api Drivebase(HardwareMap hardwareMap) {
+    public @Api Drivebase(HardwareMap hardwareMap, Supplier<Boolean> opModeIsActive) {
         frdrive = hardwareMap.get(DcMotor.class, "FRDrive");
         fldrive = hardwareMap.get(DcMotor.class, "FLDrive");
         brdrive = hardwareMap.get(DcMotor.class, "BRDrive");
         bldrive = hardwareMap.get(DcMotor.class, "BLDrive");
         imu = hardwareMap.get(IMU.class, "IMU");
+        this.opModeIsActive = opModeIsActive;
 
         fldrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -60,6 +65,7 @@ public class Drivebase {
         telemetry.addData("BLDrive", bldrive.getCurrentPosition());
         telemetry.addData("BRDrive", brdrive.getCurrentPosition());
         telemetry.addData("Heading", getHeading());
+        telemetry.update();
     }
 
 
@@ -168,7 +174,7 @@ public class Drivebase {
     public @Api void turnToAngle(double angle, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        while (Math.abs(getHeading() - angle) > 10) {
+        while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 10) {
             if (angle > 0) {
                 fldrive.setPower(power);
                 frdrive.setPower(-power);
@@ -207,7 +213,7 @@ public class Drivebase {
     }
 
     private void waitForMotors(@Nullable Telemetry telemetry) {
-        while (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy()) {
+        while (opModeIsActive.get() && (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy())) {
             if (telemetry == null) continue;
             addTelemetry(telemetry);
         }
