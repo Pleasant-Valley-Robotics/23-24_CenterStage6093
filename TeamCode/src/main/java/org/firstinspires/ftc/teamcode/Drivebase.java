@@ -12,6 +12,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+/**
+ * Class that contains the entire drivebase for the robot. Contains methods to move the robot both in auto and in teleop.
+ */
 public class Drivebase {
     private final DcMotor frdrive;
     private final DcMotor fldrive;
@@ -19,7 +22,11 @@ public class Drivebase {
     private final DcMotor bldrive;
     private final IMU imu;
 
-
+    /**
+     * Uses `hardwareMap` to initialize the motors and imu.
+     *
+     * @param hardwareMap The hardware map to use for initialization.
+     */
     public Drivebase(HardwareMap hardwareMap) {
         frdrive = hardwareMap.get(DcMotor.class, "FRDrive");
         fldrive = hardwareMap.get(DcMotor.class, "FLDrive");
@@ -55,14 +62,15 @@ public class Drivebase {
         telemetry.addData("Heading", getHeading());
     }
 
-    private void waitForMotors(@Nullable Telemetry telemetry) {
-        while (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy()) {
-            if (telemetry == null) continue;
-            addTelemetry(telemetry);
-        }
-    }
 
-    public void mecanumDrive(double xInput, double yInput, double turnInput) {
+    /**
+     * For use in teleop, controlled by a controller.
+     *
+     * @param yInput    Driving input. Negative is back, positive is forward. `[-1, 1]`.
+     * @param xInput    Strafing input. Negative is left, positive is right. `[-1, 1]`.
+     * @param turnInput Turning input. Negative is ccw, positive is clockwise. `[-1, 1]`.
+     */
+    public void mecanumDrive(double yInput, double xInput, double turnInput) {
         double frontLeft = yInput + xInput + turnInput;
         double frontRight = yInput - xInput - turnInput;
         double backLeft = yInput - xInput + turnInput;
@@ -76,12 +84,16 @@ public class Drivebase {
         brdrive.setPower(backRight / clamp);
     }
 
-    private double maxOf(double... doubles) {
-        double max = 0;
-        for (double x : doubles) if (x > max) max = x;
-        return max;
-    }
 
+    /**
+     * For use in auto. Drives forward a specified distance, using the encoders.
+     *
+     * @param inches    The amount of inches to drive forward, negative is backwards.
+     * @param power     How fast to drive. `(0, 1]`.
+     * @param telemetry Pass telemetry if you want this method to log to telemetry.
+     * @see Drivebase#driveSideways
+     * @see Drivebase#turnAngle
+     */
     public void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -107,6 +119,15 @@ public class Drivebase {
         brdrive.setPower(0);
     }
 
+    /**
+     * For use in auto. Strafes sideways a specified amount of inches, using encoders.
+     *
+     * @param inches    How many inches to strafe, negative is left.
+     * @param power     How fast to strafe. `(0, 1]`.
+     * @param telemetry Pass this if you want the method to log to telemetry.
+     * @see Drivebase#driveForward
+     * @see Drivebase#turnAngle
+     */
     public void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -132,10 +153,15 @@ public class Drivebase {
         brdrive.setPower(0);
     }
 
-    private double getHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-    }
-
+    /**
+     * For auto. Turns a specified angle in degrees, as an offset from the current heading.
+     *
+     * @param angle     How many degrees to turn. `[-180, 180]`.
+     * @param power     How fast to turn. `(0, 1]`.
+     * @param telemetry Pass this if you want this method to log to telemetry.
+     * @see Drivebase#driveSideways
+     * @see Drivebase#driveForward
+     */
     public void turnAngle(double angle, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
@@ -161,6 +187,23 @@ public class Drivebase {
         frdrive.setPower(0);
         bldrive.setPower(0);
         brdrive.setPower(0);
+    }
+
+    private void waitForMotors(@Nullable Telemetry telemetry) {
+        while (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy()) {
+            if (telemetry == null) continue;
+            addTelemetry(telemetry);
+        }
+    }
+
+    private double maxOf(double... doubles) {
+        double max = -Double.MAX_VALUE;
+        for (double x : doubles) if (x > max) max = x;
+        return max;
+    }
+
+    private double getHeading() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 }
 
