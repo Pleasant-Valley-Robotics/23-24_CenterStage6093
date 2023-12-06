@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Drivebase {
     private final DcMotor frdrive;
@@ -46,13 +47,18 @@ public class Drivebase {
         brdrive.setMode(mode);
     }
 
+    private void addTelemetry(Telemetry telemetry) {
+        telemetry.addData("FLDrive", fldrive.getCurrentPosition());
+        telemetry.addData("FRDrive", frdrive.getCurrentPosition());
+        telemetry.addData("BLDrive", bldrive.getCurrentPosition());
+        telemetry.addData("BRDrive", brdrive.getCurrentPosition());
+        telemetry.addData("Heading", getHeading());
+    }
+
     private void waitForMotors(@Nullable Telemetry telemetry) {
         while (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy()) {
             if (telemetry == null) continue;
-            telemetry.addData("FLDrive", fldrive.getCurrentPosition());
-            telemetry.addData("FRDrive", frdrive.getCurrentPosition());
-            telemetry.addData("BLDrive", bldrive.getCurrentPosition());
-            telemetry.addData("BRDrive", brdrive.getCurrentPosition());
+            addTelemetry(telemetry);
         }
     }
 
@@ -76,39 +82,116 @@ public class Drivebase {
         return max;
     }
 
-    public void driveForward(double inches, @Nullable Telemetry telemetry) {
+    public void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double frontLeft = inches * ENCODER_PER_INCH;
-        double frontRight = inches * ENCODER_PER_INCH;
-        double backLeft = inches * ENCODER_PER_INCH;
-        double backRight = inches * ENCODER_PER_INCH;
+        double target = inches * ENCODER_PER_INCH;
 
-        fldrive.setTargetPosition((int) frontLeft);
-        frdrive.setTargetPosition((int) frontRight);
-        bldrive.setTargetPosition((int) backLeft);
-        brdrive.setTargetPosition((int) backRight);
+        double frontLeftPower = inches * ENCODER_PER_INCH;
+        double frontRightPower = inches * ENCODER_PER_INCH;
+        double backLeftPower = inches * ENCODER_PER_INCH;
+        double backRightPower = inches * ENCODER_PER_INCH;
+
+
+        fldrive.setTargetPosition((int) target);
+        frdrive.setTargetPosition((int) target);
+        bldrive.setTargetPosition((int) target);
+        brdrive.setTargetPosition((int) target);
+
+        fldrive.setPower(frontLeftPower);
+        frdrive.setPower(frontRightPower);
+        bldrive.setPower(backLeftPower);
+        brdrive.setPower(backRightPower);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
 
         waitForMotors(telemetry);
+
+        fldrive.setPower(0);
+        frdrive.setPower(0);
+        bldrive.setPower(0);
+        brdrive.setPower(0);
     }
 
-    public void driveSideways(double inches, @Nullable Telemetry telemetry) {
+    public void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double frontLeft = inches * ENCODER_PER_INCH;
-        double frontRight = -inches * ENCODER_PER_INCH;
-        double backLeft = -inches * ENCODER_PER_INCH;
-        double backRight = inches * ENCODER_PER_INCH;
+        double target = inches * ENCODER_PER_INCH;
 
-        fldrive.setTargetPosition((int) frontLeft);
-        frdrive.setTargetPosition((int) frontRight);
-        bldrive.setTargetPosition((int) backLeft);
-        brdrive.setTargetPosition((int) backRight);
+        double frontLeftPower = inches * ENCODER_PER_INCH;
+        double frontRightPower = -inches * ENCODER_PER_INCH;
+        double backLeftPower = -inches * ENCODER_PER_INCH;
+        double backRightPower = inches * ENCODER_PER_INCH;
+
+
+        fldrive.setTargetPosition((int) target);
+        frdrive.setTargetPosition((int) target);
+        bldrive.setTargetPosition((int) target);
+        brdrive.setTargetPosition((int) target);
+
+        fldrive.setPower(frontLeftPower);
+        frdrive.setPower(frontRightPower);
+        bldrive.setPower(backLeftPower);
+        brdrive.setPower(backRightPower);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
 
         waitForMotors(telemetry);
+
+        fldrive.setPower(0);
+        frdrive.setPower(0);
+        bldrive.setPower(0);
+        brdrive.setPower(0);
+    }
+
+    private double getHeading() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
+
+    public void turnAngle(double angle, double power, @Nullable Telemetry telemetry) {
+        setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
+        imu.resetYaw();
+
+        while (Math.abs(getHeading() - angle) > 10) {
+            if (angle > 0) {
+                fldrive.setPower(power);
+                frdrive.setPower(-power);
+                bldrive.setPower(power);
+                brdrive.setPower(-power);
+            } else {
+                fldrive.setPower(-power);
+                frdrive.setPower(power);
+                bldrive.setPower(-power);
+                brdrive.setPower(power);
+            }
+
+            if (telemetry == null) continue;
+            addTelemetry(telemetry);
+        }
+
+        fldrive.setPower(0);
+        frdrive.setPower(0);
+        bldrive.setPower(0);
+        brdrive.setPower(0);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
