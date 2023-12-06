@@ -27,7 +27,7 @@ public class Drivebase {
      *
      * @param hardwareMap The hardware map to use for initialization.
      */
-    public Drivebase(HardwareMap hardwareMap) {
+    public @Api Drivebase(HardwareMap hardwareMap) {
         frdrive = hardwareMap.get(DcMotor.class, "FRDrive");
         fldrive = hardwareMap.get(DcMotor.class, "FLDrive");
         brdrive = hardwareMap.get(DcMotor.class, "BRDrive");
@@ -70,7 +70,7 @@ public class Drivebase {
      * @param xInput    Strafing input. Negative is left, positive is right. `[-1, 1]`.
      * @param turnInput Turning input. Negative is ccw, positive is clockwise. `[-1, 1]`.
      */
-    public void mecanumDrive(double yInput, double xInput, double turnInput) {
+    public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
         double frontLeft = yInput + xInput + turnInput;
         double frontRight = yInput - xInput - turnInput;
         double backLeft = yInput - xInput + turnInput;
@@ -93,8 +93,9 @@ public class Drivebase {
      * @param telemetry Pass telemetry if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#turnAngle
+     * @see Drivebase#turnToAngle
      */
-    public void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
+    public @Api void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double target = inches * ENCODER_PER_INCH;
@@ -127,8 +128,9 @@ public class Drivebase {
      * @param telemetry Pass this if you want the method to log to telemetry.
      * @see Drivebase#driveForward
      * @see Drivebase#turnAngle
+     * @see Drivebase#turnToAngle
      */
-    public void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
+    public @Api void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double target = inches * ENCODER_PER_INCH;
@@ -154,17 +156,17 @@ public class Drivebase {
     }
 
     /**
-     * For auto. Turns a specified angle in degrees, as an offset from the current heading.
+     * For auto. Turns to a specified angle, without resetting the heading.
      *
      * @param angle     How many degrees to turn. `[-180, 180]`.
      * @param power     How fast to turn. `(0, 1]`.
      * @param telemetry Pass this if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#driveForward
+     * @see Drivebase#turnAngle
      */
-    public void turnAngle(double angle, double power, @Nullable Telemetry telemetry) {
+    public @Api void turnToAngle(double angle, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
-        imu.resetYaw();
 
         while (Math.abs(getHeading() - angle) > 10) {
             if (angle > 0) {
@@ -189,6 +191,21 @@ public class Drivebase {
         brdrive.setPower(0);
     }
 
+    /**
+     * For auto. Turns a specified angle in degrees, as an offset from the current heading.
+     *
+     * @param angle     How many degrees to turn. `[-180, 180]`.
+     * @param power     How fast to turn. `(0, 1]`.
+     * @param telemetry Pass this if you want this method to log to telemetry.
+     * @see Drivebase#driveSideways
+     * @see Drivebase#driveForward
+     * @see Drivebase#turnToAngle
+     */
+    public @Api void turnAngle(double angle, double power, @Nullable Telemetry telemetry) {
+        imu.resetYaw();
+        turnToAngle(angle, power, telemetry);
+    }
+
     private void waitForMotors(@Nullable Telemetry telemetry) {
         while (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy()) {
             if (telemetry == null) continue;
@@ -206,6 +223,7 @@ public class Drivebase {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 }
+
 
 
 
