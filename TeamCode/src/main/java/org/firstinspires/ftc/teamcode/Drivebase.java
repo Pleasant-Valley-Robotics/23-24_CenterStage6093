@@ -87,21 +87,15 @@ public class Drivebase {
 
         double target = inches * ENCODER_PER_INCH;
 
-        double frontLeftPower = inches * ENCODER_PER_INCH;
-        double frontRightPower = inches * ENCODER_PER_INCH;
-        double backLeftPower = inches * ENCODER_PER_INCH;
-        double backRightPower = inches * ENCODER_PER_INCH;
-
-
         fldrive.setTargetPosition((int) target);
         frdrive.setTargetPosition((int) target);
         bldrive.setTargetPosition((int) target);
         brdrive.setTargetPosition((int) target);
 
-        fldrive.setPower(frontLeftPower);
-        frdrive.setPower(frontRightPower);
-        bldrive.setPower(backLeftPower);
-        brdrive.setPower(backRightPower);
+        fldrive.setPower(power);
+        frdrive.setPower(power);
+        bldrive.setPower(power);
+        brdrive.setPower(power);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -118,21 +112,15 @@ public class Drivebase {
 
         double target = inches * ENCODER_PER_INCH;
 
-        double frontLeftPower = inches * ENCODER_PER_INCH;
-        double frontRightPower = -inches * ENCODER_PER_INCH;
-        double backLeftPower = -inches * ENCODER_PER_INCH;
-        double backRightPower = inches * ENCODER_PER_INCH;
-
-
         fldrive.setTargetPosition((int) target);
         frdrive.setTargetPosition((int) target);
         bldrive.setTargetPosition((int) target);
         brdrive.setTargetPosition((int) target);
 
-        fldrive.setPower(frontLeftPower);
-        frdrive.setPower(frontRightPower);
-        bldrive.setPower(backLeftPower);
-        brdrive.setPower(backRightPower);
+        fldrive.setPower(power);
+        frdrive.setPower(-power);
+        bldrive.setPower(-power);
+        brdrive.setPower(power);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
 
