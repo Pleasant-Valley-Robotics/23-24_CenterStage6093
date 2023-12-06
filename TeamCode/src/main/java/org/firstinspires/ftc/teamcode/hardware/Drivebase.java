@@ -148,8 +148,8 @@ public class Drivebase {
         double target = inches * ENCODER_PER_INCH;
 
         fldrive.setTargetPosition((int) target);
-        frdrive.setTargetPosition((int) target);
-        bldrive.setTargetPosition((int) target);
+        frdrive.setTargetPosition((int) -target);
+        bldrive.setTargetPosition((int) -target);
         brdrive.setTargetPosition((int) target);
 
         fldrive.setPower(power);
