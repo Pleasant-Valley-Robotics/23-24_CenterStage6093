@@ -31,7 +31,7 @@ public class CubePipeline implements VisionProcessor {
     private static final Scalar blueMins = new Scalar(0, 0, 140);
     private static final Scalar blueMaxs = new Scalar(255, 255, 255);
 
-    private static final Scalar redMins = new Scalar(0, 140, 0);
+    private static final Scalar redMins = new Scalar(0, 160, 0);
     private static final Scalar redMaxs = new Scalar(255, 255, 255);
 
     private static final double crop_x = 90;
@@ -73,7 +73,9 @@ public class CubePipeline implements VisionProcessor {
         return cubeSide;
     }
 
-    /** @noinspection OptionalGetWithoutIsPresent*/
+    /**
+     * @noinspection OptionalGetWithoutIsPresent
+     */
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
         Size size = frame.size();

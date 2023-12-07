@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.utility.Api;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
@@ -18,14 +18,17 @@ public class VisionCamera {
     private final CubePipeline pipeline;
 
     public VisionCamera(HardwareMap hardwareMap, FieldSide fieldSide) {
-        Camera camera = hardwareMap.get(Camera.class, "Webcam 1");
+        WebcamName camera = hardwareMap.get(WebcamName.class, "Webcam 1");
         this.pipeline = new CubePipeline(fieldSide);
         this.portal = new VisionPortal.Builder()
-                .setCamera(camera.getCameraName())
-                .setCameraResolution(new Size(955, 537))
+                .setCamera(camera)
+                .setCameraResolution(new Size(960, 720))
                 .enableLiveView(true)
                 .addProcessor(pipeline)
                 .build();
+        this.portal.setProcessorEnabled(this.pipeline, true);
+        this.portal.resumeStreaming();
+        this.portal.resumeLiveView();
     }
 
     /**
@@ -34,6 +37,7 @@ public class VisionCamera {
      */
     public @Api void addTelemetry(Telemetry telemetry) {
         telemetry.addData("Fps", portal.getFps());
+        telemetry.addData("Cube Side", pipeline.getCubeSide());
     }
 
     /**
