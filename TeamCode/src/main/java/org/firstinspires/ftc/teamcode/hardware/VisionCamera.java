@@ -5,10 +5,9 @@ import android.util.Size;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.teamcode.CubeSide;
-import org.firstinspires.ftc.teamcode.FieldSide;
+import org.firstinspires.ftc.teamcode.utility.CubeSide;
+import org.firstinspires.ftc.teamcode.utility.FieldSide;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.VisionProcessor;
 
 public class VisionCamera {
     private final Camera camera;

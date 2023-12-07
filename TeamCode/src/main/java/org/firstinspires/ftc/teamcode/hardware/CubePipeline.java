@@ -7,12 +7,11 @@ import android.graphics.Paint;
 
 import androidx.annotation.Nullable;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.Api;
-import org.firstinspires.ftc.teamcode.CubeSide;
-import org.firstinspires.ftc.teamcode.FieldSide;
-import org.firstinspires.ftc.teamcode.Pair;
+import org.firstinspires.ftc.teamcode.utility.Api;
+import org.firstinspires.ftc.teamcode.utility.CubeSide;
+import org.firstinspires.ftc.teamcode.utility.FieldSide;
+import org.firstinspires.ftc.teamcode.utility.Pair;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

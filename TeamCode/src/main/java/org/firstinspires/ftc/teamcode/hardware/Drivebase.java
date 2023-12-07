@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import static org.firstinspires.ftc.teamcode.Config.ENCODER_PER_INCH;
+import static org.firstinspires.ftc.teamcode.utility.Config.ENCODER_PER_INCH;
 
 import androidx.annotation.Nullable;
 
@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Api;
+import org.firstinspires.ftc.teamcode.utility.Api;
 
 /**
  * Class that contains the entire drivebase for the robot. Contains methods to move the robot both in auto and in teleop.
