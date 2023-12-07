@@ -10,7 +10,7 @@ TeleOp programming is generally rather simple. This is an example of a teleop:
 public class ExampleTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
-        telemetry.setAutoClear(false);
+        telemetry.setAutoClear(true);
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
@@ -75,7 +75,7 @@ careful measurement. Here is an example of an auto:
 public class ExampleAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
-        telemetry.setAutoClear(false);
+        telemetry.setAutoClear(true);
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
@@ -104,10 +104,11 @@ public class ExampleAuto extends LinearOpMode {
 
 Most of this should be fairly intuitive:
 
-* `telemetry.setAutoClear(false);`  
+* `telemetry.setAutoClear(true);`
 
-  This prevents unused keys from getting deleted when we call `telemetry.update()`, otherwise our
-  status messages would get wiped by `drivebase` updating telemetry.
+  ~~This prevents unused keys from getting deleted when we call `telemetry.update()`, otherwise our
+  status messages would get wiped by `drivebase` updating telemetry.~~
+  Doesn't seem like there's a good way to avoid wiping the status message, unfortunately :(
 
 * `Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);`
 
