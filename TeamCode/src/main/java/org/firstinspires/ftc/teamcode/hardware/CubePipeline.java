@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class CubePipeline implements VisionProcessor {
-    public Scalar blueMins = new Scalar(0, 0, 140);
-    public Scalar blueMaxs = new Scalar(255, 255, 255);
+    private static final Scalar blueMins = new Scalar(0, 0, 140);
+    private static final Scalar blueMaxs = new Scalar(255, 255, 255);
 
-    public Scalar redMins = new Scalar(0, 140, 0);
-    public Scalar redMaxs = new Scalar(255, 255, 255);
+    private static final Scalar redMins = new Scalar(0, 140, 0);
+    private static final Scalar redMaxs = new Scalar(255, 255, 255);
 
     private static final double crop_x = 90;
     private static final double crop_y = 130;
@@ -53,13 +53,6 @@ public class CubePipeline implements VisionProcessor {
 
     public CubePipeline(FieldSide fieldSide) {
         this.fieldSide = fieldSide;
-    }
-
-    private Telemetry telemetry = null;
-
-    public CubePipeline(Telemetry telemetry) {
-        this.telemetry = telemetry;
-        this.fieldSide = FieldSide.BlueClose;
     }
 
     @Override
@@ -143,8 +136,6 @@ public class CubePipeline implements VisionProcessor {
         pointPaint.setARGB(255, 255, 255, 0);
         pointPaint.setStyle(Paint.Style.FILL);
 
-        telemetry.addData("side", cubeSide.toString());
-        telemetry.update();
 
         canvas.drawCircle(
                 (float) (point.x + crop_x) * scaleBmpPxToCanvasPx,
