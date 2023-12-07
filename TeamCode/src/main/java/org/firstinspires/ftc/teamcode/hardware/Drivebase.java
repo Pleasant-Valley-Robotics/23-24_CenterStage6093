@@ -27,7 +27,6 @@ public class Drivebase {
     private final Supplier<Boolean> opModeIsActive;
 
 
-
     /**
      * Uses `hardwareMap` to initialize the motors and imu.
      *
@@ -79,23 +78,17 @@ public class Drivebase {
 
     /**
      * For use wherever.
+     * This resets the drivebase encoders.
+     * Called before `waitForStart()` and after drivebase init.
      *
-     * This calls upon the encoders of the drivebase to clear.
-     * Called before waitForStart(); after drivebase init.
-     *
-     * Asks for you to pass a drivetype after clearing Encoders
+     * @param choice If passed, what mode to set the motors to after resetting them, otherwise whatever they were before.
      */
 
     public @Api void clearEncoder(DcMotor.RunMode choice) {
-        frdrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fldrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        brdrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bldrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // -----------------------------------------------------
-        frdrive.setMode(choice);
-        fldrive.setMode(choice);
-        brdrive.setMode(choice);
-        bldrive.setMode(choice);
+        DcMotor.RunMode oldMode = choice == null ? fldrive.getMode() : choice;
+
+        setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setMotorModes(oldMode);
     }
 
 

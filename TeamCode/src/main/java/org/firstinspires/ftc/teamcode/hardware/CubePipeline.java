@@ -73,6 +73,7 @@ public class CubePipeline implements VisionProcessor {
         return cubeSide;
     }
 
+    /** @noinspection OptionalGetWithoutIsPresent*/
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
         Size size = frame.size();
