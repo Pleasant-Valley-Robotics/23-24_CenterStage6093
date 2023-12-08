@@ -25,6 +25,7 @@ public class PixelMarksAuto extends LinearOpMode {
 
         //Assign drivebase to a instance.
         Drivebase driveBase = new Drivebase(hardwareMap, this::opModeIsActive);
+        //Assign the camera to a instance of the object.
         VisionCamera visionCamera = new VisionCamera(hardwareMap, FieldSide.RedClose);
 
         //Needed for both types of opModes.
@@ -34,7 +35,8 @@ public class PixelMarksAuto extends LinearOpMode {
         CubeSide side;
         while ((side = visionCamera.getCubePrediction()) == null) sleep(20);
 
-        driveToSpike(driveBase, side);
+        //The CubeSide.Left is only for testing. Once done testing change it back to CubeSide.
+        driveToSpike(driveBase, CubeSide.Left);
 
         //Runs after the stop button has been hit on the control hub.
     }
@@ -56,6 +58,26 @@ public class PixelMarksAuto extends LinearOpMode {
             case Middle:
                 driveBase.turnAngle(10.0, 0.5, telemetry);
                 driveBase.driveForward(26.875, 0.5, telemetry);
+        }
+    }
+
+    /**
+     * Drive robot to the backboard using a path dependent on where the robot already is and the direction it's already facing.
+     * @param driveBase
+     * @param side
+     */
+    public void driveToBoard(Drivebase driveBase, CubeSide side)
+    {
+        //if side is...
+        switch (side){
+            //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before so...
+            case Left:
+                
+            //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before so...
+            case Right:
+
+            //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before so...
+            case Middle:
         }
     }
 }
