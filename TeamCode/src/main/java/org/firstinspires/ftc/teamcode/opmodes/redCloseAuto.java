@@ -74,12 +74,6 @@ public class redCloseAuto extends LinearOpMode {
             case Left:
             driveBase.turnAngle(85, 0.5, null);
             driveBase.driveForward(57, 0.5, null);
-            //Turn robot to face the way it's going to drive.
-
-            //Drive robot a little bit out of the way of the backboard.
-
-            //Make the robot turn gain to be pointing staright at the back of the feild.
-
 
             //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before so...
             case Right:
@@ -95,5 +89,25 @@ public class redCloseAuto extends LinearOpMode {
             //Do the same as commented above.
 
         }
+    }
+
+    public void park(Drivebase driveBase, CubeSide side)
+    {
+        switch (side)
+        {
+            case Left:
+                //Turn robot to face the way it's going to drive.
+
+                //Drive robot a little bit out of the way of the backboard.
+
+                //Make the robot turn gain to be pointing staright at the back of the feild.
+
+            case Right:
+                //Same thing, with right side measurments.
+
+            case Middle:
+                //Same thing, with middle measurments.
+        }
+
     }
 }
