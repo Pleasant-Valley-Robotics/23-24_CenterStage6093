@@ -7,11 +7,10 @@ import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 import org.firstinspires.ftc.teamcode.hardware.VisionCamera;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
-import org.jetbrains.annotations.NotNull;
 
 //Names the autonomous on the control hub dropdown.
 @Autonomous(name = "pixelMarksAuto")
-public class PixelMarksAuto extends LinearOpMode {
+public class redCloseAuto extends LinearOpMode {
     @Override
     //This method is needed for teleOp and auto to run at all.
     public void runOpMode() {
@@ -50,14 +49,14 @@ public class PixelMarksAuto extends LinearOpMode {
         switch (side) {
             //if the left side is seen by the pipeline
             case Left:
-                driveBase.turnAngle(5.0, 0.5, telemetry);
-                driveBase.driveForward(31.5, 0.5, telemetry);
+                driveBase.turnAngle(5.0, 0.5, null);
+                driveBase.driveForward(31.5, 0.5, null);
             case Right:
-                driveBase.turnAngle(20.0, 0.5, telemetry);
-                driveBase.driveForward(29.625, 0.5, telemetry);
+                driveBase.turnAngle(20.0, 0.5, null);
+                driveBase.driveForward(29.625, 0.5, null);
             case Middle:
-                driveBase.turnAngle(10.0, 0.5, telemetry);
-                driveBase.driveForward(26.875, 0.5, telemetry);
+                driveBase.turnAngle(10.0, 0.5, null);
+                driveBase.driveForward(26.875, 0.5, null);
         }
     }
 
@@ -66,18 +65,22 @@ public class PixelMarksAuto extends LinearOpMode {
      * @param driveBase
      * @param side
      */
-    public void driveToBoard(Drivebase driveBase, CubeSide side)
+    public void driveToBlueBackBoard(Drivebase driveBase, CubeSide side)
     {
         //if side is...
         switch (side){
             //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before so...
             case Left:
-                
+            driveBase.turnAngle(85, 0.5, null);
+            driveBase.driveForward(57, 0.5, null);
             //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before so...
             case Right:
-
+            driveBase.turnAngle(95, 0.5, null);
+            driveBase.driveForward(37, 0.5, null);
             //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before so...
             case Middle:
+            driveBase.turnAngle(95, 0.5,null);
+            driveBase.driveForward(47, 0.5, null);
         }
     }
 }
