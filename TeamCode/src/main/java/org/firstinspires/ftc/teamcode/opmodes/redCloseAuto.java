@@ -65,7 +65,7 @@ public class redCloseAuto extends LinearOpMode {
      * @param driveBase
      * @param side
      */
-    public void driveToBlueBackBoard(Drivebase driveBase, CubeSide side)
+    public void driveToBackBoard(Drivebase driveBase, CubeSide side)
     {
         //if side is...
         switch (side){
