@@ -61,7 +61,8 @@ public class redCloseAuto extends LinearOpMode {
     }
 
     /**
-     * Drive robot to the backboard using a path dependent on where the robot already is and the direction it's already facing.
+     * Drive robot to the backboard using a path dependent on where the robot already is and the direction it's already
+     * facing then park facing the back glass of the feild.
      * @param driveBase
      * @param side
      */
@@ -73,14 +74,26 @@ public class redCloseAuto extends LinearOpMode {
             case Left:
             driveBase.turnAngle(85, 0.5, null);
             driveBase.driveForward(57, 0.5, null);
+            //Turn robot to face the way it's going to drive.
+
+            //Drive robot a little bit out of the way of the backboard.
+
+            //Make the robot turn gain to be pointing staright at the back of the feild.
+
+
             //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before so...
             case Right:
             driveBase.turnAngle(95, 0.5, null);
             driveBase.driveForward(37, 0.5, null);
+            //Do the same as commented above.
+
+
             //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before so...
             case Middle:
             driveBase.turnAngle(95, 0.5,null);
             driveBase.driveForward(47, 0.5, null);
+            //Do the same as commented above.
+
         }
     }
 }
