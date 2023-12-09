@@ -13,4 +13,6 @@ public class Config {
             RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
             RevHubOrientationOnRobot.UsbFacingDirection.UP
     );
+
+    public static final double TURNING_P_GAIN = 0.3;
 }

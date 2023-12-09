@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.utility.Config.ENCODER_PER_INCH;
 import static org.firstinspires.ftc.teamcode.utility.Config.HUB_FACING;
+import static org.firstinspires.ftc.teamcode.utility.Config.TURNING_P_GAIN;
 
 import androidx.annotation.Nullable;
 
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -210,17 +212,29 @@ public class Drivebase {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
         while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 10) {
-            if (angle > 0) {
-                setMotorPowers(power, -power, power, -power);
-            } else {
-                setMotorPowers(-power, power, -power, power);
-            }
+            final double adjustedPower = power * getTurningCorrection(angle);
+
+            setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
 
             if (telemetry == null) continue;
             addTelemetry(telemetry);
         }
 
         setMotorPowers(0);
+    }
+
+    /**
+     * Ensures that an angle is within [-180, 180].
+     * @param n Angle in degrees.
+     * @return Angle wrapped into [-180, 180].
+     */
+    private static double wrapAngle(double n) {
+        double x = (n % 360 + 360) % 360;
+        return x < 180 ? x : x - 360;
+    }
+
+    private double getTurningCorrection(double angle) {
+        return Range.clip(wrapAngle(angle - getHeading()) * TURNING_P_GAIN, -1, 1);
     }
 
     /**
