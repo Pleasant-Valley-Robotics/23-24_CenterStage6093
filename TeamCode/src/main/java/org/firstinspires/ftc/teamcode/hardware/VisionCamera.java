@@ -13,10 +13,17 @@ import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+/**
+ * Contains all the vision logic we use on the robot.
+ */
 public class VisionCamera {
     private final VisionPortal portal;
     private final CubePipeline pipeline;
 
+    /**
+     * @param hardwareMap The hardwareMap to initialize the camera with.
+     * @param fieldSide The side of the field this auto is running on.
+     */
     public VisionCamera(HardwareMap hardwareMap, FieldSide fieldSide) {
         WebcamName camera = hardwareMap.get(WebcamName.class, "Webcam 1");
         this.pipeline = new CubePipeline(fieldSide);
