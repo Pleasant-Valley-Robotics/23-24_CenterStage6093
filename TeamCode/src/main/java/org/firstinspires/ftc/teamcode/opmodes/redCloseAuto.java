@@ -37,8 +37,9 @@ public class redCloseAuto extends LinearOpMode {
             sleep(20);
         }
 
+        //Calling driveToBackBoard will call the driveToSpike method first.
         //The CubeSide.Left is only for testing. Once done testing change it back to CubeSide.
-        driveToSpike(driveBase, CubeSide.Left);
+        driveToBackBoard(driveBase, CubeSide.Left);
 
         //Runs after the stop button has been hit on the control hub.
     }
@@ -55,17 +56,16 @@ public class redCloseAuto extends LinearOpMode {
                 //Include the driveForward 5 inches to drive a little bit away from the wall before turning so it doesn't get hit.
                 //Include telemetry so we can make sure the heading and distance line up with expectations.
                 driveBase.driveForward(5, 0.5, telemetry);
-                driveBase.turnAngle(5.0, 0.5, null);
+                //This is left so it's negative.
+                driveBase.turnAngle(-10.0, 0.5, null);
                 driveBase.driveForward(26.5, 0.5, null);
 
             case Right:
                 driveBase.driveForward(5, 0, telemetry);
-                driveBase.turnAngle(20.0, 0.5, null);
+                driveBase.turnAngle(10.0, 0.5, null);
                 driveBase.driveForward(24.625, 0.5, null);
             case Middle:
-                driveBase.driveForward(5, 0.5, telemetry);
-                driveBase.turnAngle(10.0, 0.5, null);
-                driveBase.driveForward(21.875, 0.5, null);
+                driveBase.driveForward(26.875, 0.5, null);
         }
     }
 
@@ -79,27 +79,25 @@ public class redCloseAuto extends LinearOpMode {
     {
         //Call the driveToSpike method to drive to whatever spike the cube's detected on.
         driveToSpike(driveBase, side);
-
+        //Drive backwards 10 inches to get away from pixel so it doesn't travel with the robot.
+        driveBase.driveForward(-10, 0.5, null);
         //if side is...
         switch (side){
-            //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before so...
+            //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before.
             case Left:
-            driveBase.turnAngle(85, 0.5, null);
+            driveBase.turnAngle(80, 0.5, null);
             driveBase.driveForward(57, 0.5, null);
 
-            //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before so...
+            //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before.
             case Right:
-            driveBase.turnAngle(95, 0.5, null);
+                //Use turnAngle because that resets the current angle.
+            driveBase.turnAngle(100, 0.5, null);
             driveBase.driveForward(37, 0.5, null);
-            //Do the same as commented above.
 
-
-            //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before so...
+            //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before.
             case Middle:
-            driveBase.turnAngle(95, 0.5,null);
+            driveBase.turnAngle(90, 0.5,null);
             driveBase.driveForward(47, 0.5, null);
-            //Do the same as commented above.
-
         }
     }
 
