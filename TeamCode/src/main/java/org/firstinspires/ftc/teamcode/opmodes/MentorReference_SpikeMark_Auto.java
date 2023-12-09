@@ -99,7 +99,7 @@ public class MentorReference_SpikeMark_Auto extends LinearOpMode {
     private DcMotor frDrive = null;
     private DcMotor blDrive = null;
     private DcMotor brDrive = null;
-    private IMU imu = null;      // Control/Expansion Hub IMU
+    private IMU imu = null; // Control/Expansion Hub IMU
 
     private double headingError  = 0;
 
