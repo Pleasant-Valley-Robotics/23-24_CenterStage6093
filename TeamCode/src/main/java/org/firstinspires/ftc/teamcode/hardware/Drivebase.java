@@ -54,11 +54,44 @@ public class Drivebase {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    /**
+     * Utility method to set all the motor modes at the same time.
+     */
     private void setMotorModes(DcMotor.RunMode mode) {
         fldrive.setMode(mode);
         frdrive.setMode(mode);
         bldrive.setMode(mode);
         brdrive.setMode(mode);
+    }
+
+    /**
+     * Utility method to set all the motor powers at the same time.
+     */
+    private void setMotorPowers(double power) {
+        fldrive.setPower(power);
+        frdrive.setPower(power);
+        bldrive.setPower(power);
+        brdrive.setPower(power);
+    }
+
+    /**
+     * Utility method to set all the motor powers individually.
+     */
+    private void setMotorPowers(double flpower, double frpower, double blpower, double brpower) {
+        fldrive.setPower(flpower);
+        frdrive.setPower(frpower);
+        bldrive.setPower(blpower);
+        brdrive.setPower(brpower);
+    }
+
+    /**
+     * Utility method to set all the motor targets individually.
+     */
+    private void setMotorTargets(int fltarget, int frtarget, int bltarget, int brtarget) {
+        fldrive.setTargetPosition(fltarget);
+        frdrive.setTargetPosition(frtarget);
+        bldrive.setTargetPosition(bltarget);
+        brdrive.setTargetPosition(brtarget);
     }
 
     /**
@@ -84,7 +117,7 @@ public class Drivebase {
      * @param choice If passed, what mode to set the motors to after resetting them, otherwise whatever they were before.
      */
 
-    public @Api void clearEncoder(DcMotor.RunMode choice) {
+    public @Api void clearEncoder(@Nullable DcMotor.RunMode choice) {
         DcMotor.RunMode oldMode = choice == null ? fldrive.getMode() : choice;
 
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -107,10 +140,12 @@ public class Drivebase {
 
         double clamp = maxOf(1, frontLeft, frontRight, backLeft, backRight);
 
-        fldrive.setPower(frontLeft / clamp);
-        frdrive.setPower(frontRight / clamp);
-        bldrive.setPower(backLeft / clamp);
-        brdrive.setPower(backRight / clamp);
+        setMotorPowers(
+                frontLeft / clamp,
+                frontRight / clamp,
+                backLeft / clamp,
+                backRight / clamp
+        );
     }
 
 
@@ -129,24 +164,15 @@ public class Drivebase {
 
         double target = inches * ENCODER_PER_INCH;
 
-        fldrive.setTargetPosition((int) target);
-        frdrive.setTargetPosition((int) target);
-        bldrive.setTargetPosition((int) target);
-        brdrive.setTargetPosition((int) target);
+        setMotorTargets((int) target, (int) target, (int) target, (int) target);
 
-        fldrive.setPower(power);
-        frdrive.setPower(power);
-        bldrive.setPower(power);
-        brdrive.setPower(power);
+        setMotorPowers(power);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
 
         waitForMotors(telemetry);
 
-        fldrive.setPower(0);
-        frdrive.setPower(0);
-        bldrive.setPower(0);
-        brdrive.setPower(0);
+        setMotorPowers(0);
     }
 
     /**
@@ -164,24 +190,15 @@ public class Drivebase {
 
         double target = inches * ENCODER_PER_INCH;
 
-        fldrive.setTargetPosition((int) target);
-        frdrive.setTargetPosition((int) -target);
-        bldrive.setTargetPosition((int) -target);
-        brdrive.setTargetPosition((int) target);
+        setMotorTargets((int) target, (int) -target, (int) -target, (int) target);
 
-        fldrive.setPower(power);
-        frdrive.setPower(-power);
-        bldrive.setPower(-power);
-        brdrive.setPower(power);
+        setMotorPowers(power);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
 
         waitForMotors(telemetry);
 
-        fldrive.setPower(0);
-        frdrive.setPower(0);
-        bldrive.setPower(0);
-        brdrive.setPower(0);
+        setMotorPowers(0);
     }
 
     /**
@@ -199,25 +216,16 @@ public class Drivebase {
 
         while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 10) {
             if (angle > 0) {
-                fldrive.setPower(power);
-                frdrive.setPower(-power);
-                bldrive.setPower(power);
-                brdrive.setPower(-power);
+                setMotorPowers(power, -power, power, -power);
             } else {
-                fldrive.setPower(-power);
-                frdrive.setPower(power);
-                bldrive.setPower(-power);
-                brdrive.setPower(power);
+                setMotorPowers(-power, power, -power, power);
             }
 
             if (telemetry == null) continue;
             addTelemetry(telemetry);
         }
 
-        fldrive.setPower(0);
-        frdrive.setPower(0);
-        bldrive.setPower(0);
-        brdrive.setPower(0);
+        setMotorPowers(0);
     }
 
     /**
