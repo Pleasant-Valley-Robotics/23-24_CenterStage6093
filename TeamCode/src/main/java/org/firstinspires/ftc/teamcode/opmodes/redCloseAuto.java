@@ -52,14 +52,14 @@ public class redCloseAuto extends LinearOpMode {
         switch (side) {
             //if the left side is seen by the pipeline
             case Left:
-                driveBase.turnAngle(5.0, 0.5, null);
                 driveBase.driveForward(31.5, 0.5, null);
+                driveBase.turnAngle(5.0, 0.5, null);
             case Right:
-                driveBase.turnAngle(20.0, 0.5, null);
                 driveBase.driveForward(29.625, 0.5, null);
+                driveBase.turnAngle(20.0, 0.5, null);
             case Middle:
-                driveBase.turnAngle(10.0, 0.5, null);
                 driveBase.driveForward(26.875, 0.5, null);
+                driveBase.turnAngle(10.0, 0.5, null);
         }
     }
 
