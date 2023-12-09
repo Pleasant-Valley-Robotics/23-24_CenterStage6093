@@ -12,6 +12,10 @@ import org.firstinspires.ftc.teamcode.utility.Api;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 
 /**
  * Contains all the vision logic we use on the robot.
@@ -19,23 +23,56 @@ import org.firstinspires.ftc.vision.VisionPortal;
 public class VisionCamera {
     private final VisionPortal portal;
     private final CubePipeline pipeline;
+    private final AprilTagProcessor apriltags;
 
     /**
+     * When initialized, detection is disabled.
+     *
      * @param hardwareMap The hardwareMap to initialize the camera with.
      * @param fieldSide   The side of the field this auto is running on.
+     * @see VisionCamera#enableCubePipeline
+     * @see VisionCamera#enableAprilTags
      */
     public VisionCamera(HardwareMap hardwareMap, FieldSide fieldSide) {
         WebcamName camera = hardwareMap.get(WebcamName.class, "Webcam 1");
         this.pipeline = new CubePipeline(fieldSide);
+        this.apriltags = AprilTagProcessor.easyCreateWithDefaults();
+
         this.portal = new VisionPortal.Builder()
                 .setCamera(camera)
                 .setCameraResolution(new Size(960, 720))
                 .enableLiveView(true)
                 .addProcessor(pipeline)
+                .addProcessor(apriltags)
                 .build();
-        this.portal.setProcessorEnabled(this.pipeline, true);
+
+        disableDetection();
         this.portal.resumeStreaming();
         this.portal.resumeLiveView();
+    }
+
+    /**
+     * Turns on cube detection, and disables apriltag detection.
+     */
+    public @Api void enableCubePipeline() {
+        portal.setProcessorEnabled(pipeline, true);
+        portal.setProcessorEnabled(apriltags, false);
+    }
+
+    /**
+     * Turns on apriltag detection, and disables cube detection.
+     */
+    public @Api void enableAprilTags() {
+        portal.setProcessorEnabled(pipeline, false);
+        portal.setProcessorEnabled(apriltags, true);
+    }
+
+    /**
+     * Turns off detection altogether.
+     */
+    public @Api void disableDetection() {
+        portal.setProcessorEnabled(pipeline, false);
+        portal.setProcessorEnabled(apriltags, false);
     }
 
     /**
@@ -66,5 +103,15 @@ public class VisionCamera {
         }
 
         return lastSide;
+    }
+
+    /**
+     * Gets all of the last visible apriltags.
+     *
+     * @return list of apriltags.
+     */
+    @Nullable
+    public @Api List<AprilTagDetection> getAprilTags() {
+        return apriltags.getDetections();
     }
 }
