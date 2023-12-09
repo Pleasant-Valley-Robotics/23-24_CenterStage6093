@@ -52,14 +52,20 @@ public class redCloseAuto extends LinearOpMode {
         switch (side) {
             //if the left side is seen by the pipeline
             case Left:
-                driveBase.driveForward(31.5, 0.5, null);
+                //Include the driveForward 5 inches to drive a little bit away from the wall before turning so it doesn't get hit.
+                //Include telemetry so we can make sure the heading and distance line up with expectations.
+                driveBase.driveForward(5, 0.5, telemetry);
                 driveBase.turnAngle(5.0, 0.5, null);
+                driveBase.driveForward(26.5, 0.5, null);
+
             case Right:
-                driveBase.driveForward(29.625, 0.5, null);
+                driveBase.driveForward(5, 0, telemetry);
                 driveBase.turnAngle(20.0, 0.5, null);
+                driveBase.driveForward(24.625, 0.5, null);
             case Middle:
-                driveBase.driveForward(26.875, 0.5, null);
+                driveBase.driveForward(5, 0.5, telemetry);
                 driveBase.turnAngle(10.0, 0.5, null);
+                driveBase.driveForward(21.875, 0.5, null);
         }
     }
 
@@ -71,6 +77,9 @@ public class redCloseAuto extends LinearOpMode {
      */
     public void driveToBackBoard(Drivebase driveBase, CubeSide side)
     {
+        //Call the driveToSpike method to drive to whatever spike the cube's detected on.
+        driveToSpike(driveBase, side);
+
         //if side is...
         switch (side){
             //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before so...
