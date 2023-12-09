@@ -235,6 +235,10 @@ public class Drivebase {
         turnToAngle(angle, power, telemetry);
     }
 
+    /**
+     * Waits until the motors are finished moving, or the driver presses stop.
+     * @param telemetry Pass this if you want to log to telemetry.
+     */
     private void waitForMotors(@Nullable Telemetry telemetry) {
         while (opModeIsActive.get() && (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy())) {
             if (telemetry == null) continue;
@@ -242,34 +246,20 @@ public class Drivebase {
         }
     }
 
+    /**
+     * @param doubles Numbers to look over.
+     * @return The maximum number.
+     */
     private double maxOf(double... doubles) {
         double max = -Double.MAX_VALUE;
         for (double x : doubles) if (x > max) max = x;
         return max;
     }
 
+    /**
+     * @return The robot heading in degrees.
+     */
     private double getHeading() {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
