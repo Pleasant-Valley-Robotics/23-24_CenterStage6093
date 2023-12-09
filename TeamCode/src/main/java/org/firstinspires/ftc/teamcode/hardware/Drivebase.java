@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.utility.Config.ENCODER_PER_INCH;
+import static org.firstinspires.ftc.teamcode.utility.Config.HUB_FACING;
 
 import androidx.annotation.Nullable;
 
@@ -27,7 +28,6 @@ public class Drivebase {
     private final Supplier<Boolean> opModeIsActive;
 
 
-
     /**
      * Uses `hardwareMap` to initialize the motors and imu.
      *
@@ -40,6 +40,8 @@ public class Drivebase {
         brdrive = hardwareMap.get(DcMotor.class, "BRDrive");
         bldrive = hardwareMap.get(DcMotor.class, "BLDrive");
         imu = hardwareMap.get(IMU.class, "IMU");
+        imu.initialize(new IMU.Parameters(HUB_FACING));
+
         this.opModeIsActive = opModeIsActive;
 
         fldrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -101,13 +103,12 @@ public class Drivebase {
      *
      * @param telemetry The telemetry board to add the data to.
      */
-    public @Api void addTelemetry(Telemetry telemetry, double target) {
+    public @Api void addTelemetry(Telemetry telemetry) {
         telemetry.addData("FLDrive", fldrive.getCurrentPosition());
         telemetry.addData("FRDrive", frdrive.getCurrentPosition());
         telemetry.addData("BLDrive", bldrive.getCurrentPosition());
         telemetry.addData("BRDrive", brdrive.getCurrentPosition());
         telemetry.addData("Heading", getHeading());
-        telemetry.addData("Target", target);
         telemetry.update();
     }
 
@@ -168,7 +169,7 @@ public class Drivebase {
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         setMotorPowers(power);
-        waitForMotors(telemetry, target);
+        waitForMotors(telemetry);
 
         setMotorPowers(0);
     }
@@ -190,7 +191,7 @@ public class Drivebase {
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         setMotorPowers(power);
-        waitForMotors(telemetry, target);
+        waitForMotors(telemetry);
 
         setMotorPowers(0);
     }
@@ -216,7 +217,7 @@ public class Drivebase {
             }
 
             if (telemetry == null) continue;
-            addTelemetry(telemetry, angle);
+            addTelemetry(telemetry);
         }
 
         setMotorPowers(0);
@@ -239,13 +240,13 @@ public class Drivebase {
 
     /**
      * Waits until the motors are finished moving, or the driver presses stop.
+     *
      * @param telemetry Pass this if you want to log to telemetry.
      */
-    private void waitForMotors(@Nullable Telemetry telemetry, double target) {
+    private void waitForMotors(@Nullable Telemetry telemetry) {
         while (opModeIsActive.get() && (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy())) {
             if (telemetry == null) continue;
-            addTelemetry(telemetry, target);
-
+            addTelemetry(telemetry);
         }
     }
 
