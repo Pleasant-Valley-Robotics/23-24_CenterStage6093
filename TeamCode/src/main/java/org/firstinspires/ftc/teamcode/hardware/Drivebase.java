@@ -27,6 +27,7 @@ public class Drivebase {
     private final Supplier<Boolean> opModeIsActive;
 
 
+
     /**
      * Uses `hardwareMap` to initialize the motors and imu.
      *
@@ -100,12 +101,13 @@ public class Drivebase {
      *
      * @param telemetry The telemetry board to add the data to.
      */
-    public @Api void addTelemetry(Telemetry telemetry) {
+    public @Api void addTelemetry(Telemetry telemetry, double target) {
         telemetry.addData("FLDrive", fldrive.getCurrentPosition());
         telemetry.addData("FRDrive", frdrive.getCurrentPosition());
         telemetry.addData("BLDrive", bldrive.getCurrentPosition());
         telemetry.addData("BRDrive", brdrive.getCurrentPosition());
         telemetry.addData("Heading", getHeading());
+        telemetry.addData("Target", target);
         telemetry.update();
     }
 
@@ -166,7 +168,7 @@ public class Drivebase {
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         setMotorPowers(power);
-        waitForMotors(telemetry);
+        waitForMotors(telemetry, target);
 
         setMotorPowers(0);
     }
@@ -188,7 +190,7 @@ public class Drivebase {
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         setMotorPowers(power);
-        waitForMotors(telemetry);
+        waitForMotors(telemetry, target);
 
         setMotorPowers(0);
     }
@@ -214,7 +216,7 @@ public class Drivebase {
             }
 
             if (telemetry == null) continue;
-            addTelemetry(telemetry);
+            addTelemetry(telemetry, angle);
         }
 
         setMotorPowers(0);
@@ -239,10 +241,11 @@ public class Drivebase {
      * Waits until the motors are finished moving, or the driver presses stop.
      * @param telemetry Pass this if you want to log to telemetry.
      */
-    private void waitForMotors(@Nullable Telemetry telemetry) {
+    private void waitForMotors(@Nullable Telemetry telemetry, double target) {
         while (opModeIsActive.get() && (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy())) {
             if (telemetry == null) continue;
-            addTelemetry(telemetry);
+            addTelemetry(telemetry, target);
+
         }
     }
 

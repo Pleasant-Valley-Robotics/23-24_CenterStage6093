@@ -34,7 +34,7 @@ public class TestingTeleOp extends LinearOpMode {
             double turnInput = gamepad1.right_stick_x;
 
             drivebase.mecanumDrive(yInput, xInput, turnInput);
-            drivebase.addTelemetry(telemetry);
+            drivebase.addTelemetry(telemetry, 0.0);
 
             telemetry.addData("Status", "Running");
             telemetry.update();

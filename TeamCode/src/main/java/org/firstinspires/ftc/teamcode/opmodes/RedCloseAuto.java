@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utility.FieldSide;
 
 //Names the autonomous on the control hub dropdown.
 @Autonomous(name = "pixelMarksAuto")
-public class redCloseAuto extends LinearOpMode {
+public class RedCloseAuto extends LinearOpMode {
     @Override
     //This method is needed for teleOp and auto to run at all.
     public void runOpMode() {
@@ -49,23 +49,23 @@ public class redCloseAuto extends LinearOpMode {
      * That could be the left, middle, or right pixel depending on what the pipeline sees.
      */
     public void driveToSpike(Drivebase driveBase, CubeSide side) {
-        //if side is...
+        //if side is left driveForward 5 inches, turn left to a certain angle, drive forward again a certain distance. Right does the same thing but with different measurements.
+        //middle doesn't turn at all because it's a straight shot, it just drives a certain distance.
         switch (side) {
             //if the left side is seen by the pipeline
             case Left:
                 //Include the driveForward 5 inches to drive a little bit away from the wall before turning so it doesn't get hit.
                 //Include telemetry so we can make sure the heading and distance line up with expectations.
-                driveBase.driveForward(5, 0.5, telemetry);
+                driveBase.driveForward(5, 0.2, telemetry);
                 //This is left so it's negative.
-                driveBase.turnAngle(-10.0, 0.5, null);
-                driveBase.driveForward(26.5, 0.5, null);
-
+                driveBase.turnAngle(-10.0, 0.2, telemetry);
+                driveBase.driveForward(20.5, 0.2, telemetry);
             case Right:
                 driveBase.driveForward(5, 0, telemetry);
-                driveBase.turnAngle(10.0, 0.5, null);
-                driveBase.driveForward(24.625, 0.5, null);
+                driveBase.turnAngle(10.0, 0.2, telemetry);
+                driveBase.driveForward(24.625, 0.2, telemetry);
             case Middle:
-                driveBase.driveForward(26.875, 0.5, null);
+                driveBase.driveForward(26.875, 0.2, telemetry);
         }
     }
 
@@ -85,30 +85,42 @@ public class redCloseAuto extends LinearOpMode {
         switch (side){
             //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before.
             case Left:
-            driveBase.turnAngle(80, 0.5, null);
-            driveBase.driveForward(57, 0.5, null);
+                driveBase.turnAngle(80, 0.5, null);
+                driveBase.driveForward(56, 0.5, null);
 
             //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before.
             case Right:
                 //Use turnAngle because that resets the current angle.
-            driveBase.turnAngle(100, 0.5, null);
-            driveBase.driveForward(37, 0.5, null);
+                driveBase.turnAngle(100, 0.5, null);
+                driveBase.driveForward(35, 0.5, null);
 
             //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before.
             case Middle:
-            driveBase.turnAngle(90, 0.5,null);
-            driveBase.driveForward(47, 0.5, null);
+                driveBase.turnAngle(90, 0.5,null);
+                driveBase.driveForward(46, 0.5, null);
         }
     }
 
+    /**
+     * Calls driveToBackboard method that calls driveToSpike.
+     * Turns to a certain angle, drives and then stops, starting from where the robot is after going to the backboard.
+     * @param driveBase
+     * @param side
+     */
+
     public void park(Drivebase driveBase, CubeSide side)
     {
+        //Call the driveToBackBoard method that calls driveToSpike.
+        driveToBackBoard(driveBase, side);
+
         switch (side)
         {
             case Left:
-                //Turn robot to face the way it's going to drive.
+                //Back robot up 5 inches to not run into the board when turning.
 
-                //Drive robot a little bit out of the way of the backboard.
+                //Turn robot to where we want it to go and stay.
+
+                //Drive to where we want it to stop.
 
                 //Make the robot turn gain to be pointing staright at the back of the feild.
 
@@ -118,6 +130,5 @@ public class redCloseAuto extends LinearOpMode {
             case Middle:
                 //Same thing, with middle measurments.
         }
-
     }
 }
