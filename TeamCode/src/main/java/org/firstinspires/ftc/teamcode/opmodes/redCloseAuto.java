@@ -17,7 +17,7 @@ public class redCloseAuto extends LinearOpMode {
         //Runs after the robot has been initialized.
         //Assign vars here and create instances of needed classes.
 
-        telemetry.setAutoClear(false);
+        telemetry.setAutoClear(true);
         telemetry.addData("Status", "initializing");
         telemetry.update();
 
@@ -32,7 +32,10 @@ public class redCloseAuto extends LinearOpMode {
         //Runs while the opmode is running.
         //This is needed to make a auto or teleOp run.
         CubeSide side;
-        while ((side = visionCamera.getCubePrediction()) == null) sleep(20);
+        //while there's no side detected (there's no object in view) sleep.
+        while ((side = visionCamera.getCubePrediction()) == null) {
+            sleep(20);
+        }
 
         //The CubeSide.Left is only for testing. Once done testing change it back to CubeSide.
         driveToSpike(driveBase, CubeSide.Left);
