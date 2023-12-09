@@ -4,13 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
-import org.firstinspires.ftc.teamcode.hardware.VisionCamera;
-import org.firstinspires.ftc.teamcode.utility.FieldSide;
 
-import java.util.Objects;
-
-@Autonomous(name = "BasicAuto")
-public class BasicAuto extends LinearOpMode {
+@Autonomous(name = "TestingAuto")
+public class TestingAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         // ALWAYS SET TELEMETRY AUTOCLEAR to TRUE!!!
@@ -21,27 +17,29 @@ public class BasicAuto extends LinearOpMode {
         telemetry.update();
 
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
-        VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.BlueClose);
+//        VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.BlueClose);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
         // RUNNING CODE.
 
-        switch (Objects.requireNonNull(camera.getCubePrediction())) {
-            case Right:
-                drivebase.turnAngle(90, 1, null);
-                break;
-            case Left:
-                drivebase.turnAngle(-90, 1, null);
-                break;
-            case Middle:
-                drivebase.driveForward(10,1,null);
-                break;
-            default:
+        drivebase.driveForward(24.0, 0.25, telemetry);
 
-                break;
-        }
+//        switch (Objects.requireNonNull(camera.getCubePrediction())) {
+//            case Right:
+//                drivebase.turnAngle(90, 1, null);
+//                break;
+//            case Left:
+//                drivebase.turnAngle(-90, 1, null);
+//                break;
+//            case Middle:
+//                drivebase.driveForward(10, 1, null);
+//                break;
+//            default:
+//
+//                break;
+//        }
 
 
         telemetry.addData("Status", "Running");

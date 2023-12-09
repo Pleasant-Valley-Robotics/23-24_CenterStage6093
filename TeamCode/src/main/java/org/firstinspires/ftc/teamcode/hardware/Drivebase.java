@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.utility.Config.ENCODER_PER_INCH;
+import static org.firstinspires.ftc.teamcode.utility.Config.HUB_FACING;
+import static org.firstinspires.ftc.teamcode.utility.Config.TURNING_P_GAIN;
 
 import androidx.annotation.Nullable;
 
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -39,6 +42,8 @@ public class Drivebase {
         brdrive = hardwareMap.get(DcMotor.class, "BRDrive");
         bldrive = hardwareMap.get(DcMotor.class, "BLDrive");
         imu = hardwareMap.get(IMU.class, "IMU");
+        imu.initialize(new IMU.Parameters(HUB_FACING));
+
         this.opModeIsActive = opModeIsActive;
 
         fldrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -46,19 +51,52 @@ public class Drivebase {
         bldrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         brdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        fldrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        frdrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        bldrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        brdrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        fldrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        frdrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        bldrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        brdrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    /**
+     * Utility method to set all the motor modes at the same time.
+     */
     private void setMotorModes(DcMotor.RunMode mode) {
         fldrive.setMode(mode);
         frdrive.setMode(mode);
         bldrive.setMode(mode);
         brdrive.setMode(mode);
+    }
+
+    /**
+     * Utility method to set all the motor powers at the same time.
+     */
+    private void setMotorPowers(double power) {
+        fldrive.setPower(power);
+        frdrive.setPower(power);
+        bldrive.setPower(power);
+        brdrive.setPower(power);
+    }
+
+    /**
+     * Utility method to set all the motor powers individually.
+     */
+    public void setMotorPowers(double flpower, double frpower, double blpower, double brpower) {
+        fldrive.setPower(flpower);
+        frdrive.setPower(frpower);
+        bldrive.setPower(blpower);
+        brdrive.setPower(brpower);
+    }
+
+    /**
+     * Utility method to set all the motor targets individually.
+     */
+    private void setMotorTargets(int fltarget, int frtarget, int bltarget, int brtarget) {
+        fldrive.setTargetPosition(fltarget);
+        frdrive.setTargetPosition(frtarget);
+        bldrive.setTargetPosition(bltarget);
+        brdrive.setTargetPosition(brtarget);
     }
 
     /**
@@ -84,7 +122,7 @@ public class Drivebase {
      * @param choice If passed, what mode to set the motors to after resetting them, otherwise whatever they were before.
      */
 
-    public @Api void clearEncoder(DcMotor.RunMode choice) {
+    public @Api void clearEncoder(@Nullable DcMotor.RunMode choice) {
         DcMotor.RunMode oldMode = choice == null ? fldrive.getMode() : choice;
 
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -107,10 +145,12 @@ public class Drivebase {
 
         double clamp = maxOf(1, frontLeft, frontRight, backLeft, backRight);
 
-        fldrive.setPower(frontLeft / clamp);
-        frdrive.setPower(frontRight / clamp);
-        bldrive.setPower(backLeft / clamp);
-        brdrive.setPower(backRight / clamp);
+        setMotorPowers(
+                frontLeft / clamp,
+                frontRight / clamp,
+                backLeft / clamp,
+                backRight / clamp
+        );
     }
 
 
@@ -126,27 +166,14 @@ public class Drivebase {
      */
     public @Api void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         double target = inches * ENCODER_PER_INCH;
-
-        fldrive.setTargetPosition((int) target);
-        frdrive.setTargetPosition((int) target);
-        bldrive.setTargetPosition((int) target);
-        brdrive.setTargetPosition((int) target);
-
-        fldrive.setPower(power);
-        frdrive.setPower(power);
-        bldrive.setPower(power);
-        brdrive.setPower(power);
+        setMotorTargets((int) target, (int) target, (int) target, (int) target);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
-
+        setMotorPowers(power);
         waitForMotors(telemetry);
 
-        fldrive.setPower(0);
-        frdrive.setPower(0);
-        bldrive.setPower(0);
-        brdrive.setPower(0);
+        setMotorPowers(0);
     }
 
     /**
@@ -161,27 +188,14 @@ public class Drivebase {
      */
     public @Api void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         double target = inches * ENCODER_PER_INCH;
-
-        fldrive.setTargetPosition((int) target);
-        frdrive.setTargetPosition((int) -target);
-        bldrive.setTargetPosition((int) -target);
-        brdrive.setTargetPosition((int) target);
-
-        fldrive.setPower(power);
-        frdrive.setPower(-power);
-        bldrive.setPower(-power);
-        brdrive.setPower(power);
+        setMotorTargets((int) target, (int) -target, (int) -target, (int) target);
 
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
-
+        setMotorPowers(power);
         waitForMotors(telemetry);
 
-        fldrive.setPower(0);
-        frdrive.setPower(0);
-        bldrive.setPower(0);
-        brdrive.setPower(0);
+        setMotorPowers(0);
     }
 
     /**
@@ -198,26 +212,29 @@ public class Drivebase {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
         while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 10) {
-            if (angle > 0) {
-                fldrive.setPower(power);
-                frdrive.setPower(-power);
-                bldrive.setPower(power);
-                brdrive.setPower(-power);
-            } else {
-                fldrive.setPower(-power);
-                frdrive.setPower(power);
-                bldrive.setPower(-power);
-                brdrive.setPower(power);
-            }
+            final double adjustedPower = power * getTurningCorrection(angle);
+
+            setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
 
             if (telemetry == null) continue;
             addTelemetry(telemetry);
         }
 
-        fldrive.setPower(0);
-        frdrive.setPower(0);
-        bldrive.setPower(0);
-        brdrive.setPower(0);
+        setMotorPowers(0);
+    }
+
+    /**
+     * Ensures that an angle is within [-180, 180].
+     * @param n Angle in degrees.
+     * @return Angle wrapped into [-180, 180].
+     */
+    private static double wrapAngle(double n) {
+        double x = (n % 360 + 360) % 360;
+        return x < 180 ? x : x - 360;
+    }
+
+    private double getTurningCorrection(double angle) {
+        return Range.clip(wrapAngle(angle - getHeading()) * TURNING_P_GAIN, -1, 1);
     }
 
     /**
@@ -235,6 +252,11 @@ public class Drivebase {
         turnToAngle(angle, power, telemetry);
     }
 
+    /**
+     * Waits until the motors are finished moving, or the driver presses stop.
+     *
+     * @param telemetry Pass this if you want to log to telemetry.
+     */
     private void waitForMotors(@Nullable Telemetry telemetry) {
         while (opModeIsActive.get() && (fldrive.isBusy() || frdrive.isBusy() || bldrive.isBusy() || brdrive.isBusy())) {
             if (telemetry == null) continue;
@@ -242,34 +264,20 @@ public class Drivebase {
         }
     }
 
+    /**
+     * @param doubles Numbers to look over.
+     * @return The maximum number.
+     */
     private double maxOf(double... doubles) {
         double max = -Double.MAX_VALUE;
         for (double x : doubles) if (x > max) max = x;
         return max;
     }
 
+    /**
+     * @return The robot heading in degrees.
+     */
     private double getHeading() {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
