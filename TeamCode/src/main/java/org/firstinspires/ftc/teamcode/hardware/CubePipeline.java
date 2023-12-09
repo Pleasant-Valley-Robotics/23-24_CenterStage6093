@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.utility.Api;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
 import org.firstinspires.ftc.teamcode.utility.Pair;
+import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -27,16 +28,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Pipeline to detect the position of the cube.
+ */
 public class CubePipeline implements VisionProcessor {
+    // Parameters for the vision algorithm.
+    // Do not touch unless you know what you are doing.
     private static final Scalar blueMins = new Scalar(0, 0, 140);
     private static final Scalar blueMaxs = new Scalar(255, 255, 255);
-
     private static final Scalar redMins = new Scalar(0, 160, 0);
     private static final Scalar redMaxs = new Scalar(255, 255, 255);
-
     private static final double crop_x = 90;
     private static final double crop_y = 130;
-
     private static final int cutoff_left = 349;
     private static final int cutoff_right = 606;
 
@@ -50,17 +53,21 @@ public class CubePipeline implements VisionProcessor {
     private final FieldSide fieldSide;
     private CubeSide cubeSide = null;
 
+    /**
+     * @param fieldSide The side of the field we are on.
+     */
     public CubePipeline(FieldSide fieldSide) {
         this.fieldSide = fieldSide;
     }
 
-    @Override
-    public void init(int width, int height, CameraCalibration calibration) {
-        yrb.add(new Mat(width, height, CvType.CV_8UC1));
-        yrb.add(new Mat(width, height, CvType.CV_8UC1));
-        yrb.add(new Mat(width, height, CvType.CV_8UC1));
-    }
-
+    /**
+     * Adds a layer to a mask, using a grayscale image and a valid range.
+     *
+     * @param src   Grayscale image to use. Must be in format {@link CvType#CV_8UC1}
+     * @param mask  Mask to add to. Must be in format {@link CvType#CV_8UC1}
+     * @param start Start value for the threshold. [0, 255].
+     * @param end   End value for the threshold. [0, 255].
+     */
     private void filterRange(Mat src, Mat mask, double start, double end) {
         Imgproc.threshold(src, buf, start, 255, Imgproc.THRESH_BINARY);
         mask.copyTo(buf, buf);
@@ -68,13 +75,28 @@ public class CubePipeline implements VisionProcessor {
         buf.copyTo(mask, mask);
     }
 
+    /**
+     * @return the current cube prediction, or null if it hasn't calculated yet.
+     */
     @Nullable
     public @Api CubeSide getCubeSide() {
         return cubeSide;
     }
 
     /**
-     * @noinspection OptionalGetWithoutIsPresent
+     * Do not call manually, use {@link VisionCamera}.<br/>
+     * Called when the pipeline is initialized by a {@link VisionPortal}.
+     */
+    @Override
+    public void init(int width, int height, CameraCalibration calibration) {
+        yrb.add(new Mat(width, height, CvType.CV_8UC1));
+        yrb.add(new Mat(width, height, CvType.CV_8UC1));
+        yrb.add(new Mat(width, height, CvType.CV_8UC1));
+    }
+
+    /**
+     * Do not call manually, use {@link VisionCamera}.<br/>
+     * Tries to find the current cube position from an image.
      */
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
@@ -107,7 +129,9 @@ public class CubePipeline implements VisionProcessor {
         Point maxPoint;
 
         try {
+            //noinspection OptionalGetWithoutIsPresent
             maxContour = contours.stream().max(Comparator.comparingDouble(Imgproc::contourArea)).get();
+            //noinspection OptionalGetWithoutIsPresent
             Point temp = maxContour.toList().stream().reduce((a, b) -> new Point(a.x + b.x, a.y + b.y)).get();
             maxPoint = new Point(temp.x / maxContour.size(0), temp.y / maxContour.size(0));
         } catch (NoSuchElementException e) {
@@ -127,6 +151,10 @@ public class CubePipeline implements VisionProcessor {
         return new Pair<>(maxContour.toList(), maxPoint);
     }
 
+    /**
+     * Do not call manually, use {@link VisionCamera}.<br/>
+     * Draws the current cube prediction on the canvas.
+     */
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
         // noinspection unchecked
