@@ -1,9 +1,16 @@
 package org.firstinspires.ftc.teamcode.utility;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+
 public class Config {
     // Encoder/Inch = 360/Ticks per motor shaft revolution
-    public static final double ENCODER_PER_REV = 7; //Encoder pulses per rev by supplier information
-    public static final double GEARBOX_REDUCTION = 19.4 * (7/9); //Gearbox on motor * gearbox on robot
+    public static final double TICKS_PER_REVOLUTION = 537.6; //Encoder pulses per rev by supplier information
+    public static final double GEARBOX_REDUCTION = 7.0 / 9.0; //Gearbox on motor * gearbox on robot
     public static final double WHEEL_DIAMETER_INCHES = 4; //Wheel diameter in inches
-    public static final double ENCODER_PER_INCH = (ENCODER_PER_REV * GEARBOX_REDUCTION) / (WHEEL_DIAMETER_INCHES*Math.PI);
+    public static final double ENCODER_PER_INCH = (TICKS_PER_REVOLUTION * GEARBOX_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+
+    public static final RevHubOrientationOnRobot HUB_FACING = new RevHubOrientationOnRobot(
+            RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+            RevHubOrientationOnRobot.UsbFacingDirection.UP
+    );
 }
