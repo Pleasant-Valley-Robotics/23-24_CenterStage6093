@@ -161,15 +161,11 @@ public class Drivebase {
      */
     public @Api void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         double target = inches * ENCODER_PER_INCH;
-
         setMotorTargets((int) target, (int) target, (int) target, (int) target);
 
-        setMotorPowers(power);
-
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
-
+        setMotorPowers(power);
         waitForMotors(telemetry);
 
         setMotorPowers(0);
@@ -187,15 +183,11 @@ public class Drivebase {
      */
     public @Api void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         double target = inches * ENCODER_PER_INCH;
-
         setMotorTargets((int) target, (int) -target, (int) -target, (int) target);
 
-        setMotorPowers(power);
-
         setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
-
+        setMotorPowers(power);
         waitForMotors(telemetry);
 
         setMotorPowers(0);
