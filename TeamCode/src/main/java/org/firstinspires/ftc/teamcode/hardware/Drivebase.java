@@ -47,10 +47,10 @@ public class Drivebase {
         bldrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         brdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        fldrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        frdrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        bldrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        brdrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        fldrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        frdrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        bldrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        brdrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -78,7 +78,7 @@ public class Drivebase {
     /**
      * Utility method to set all the motor powers individually.
      */
-    private void setMotorPowers(double flpower, double frpower, double blpower, double brpower) {
+    public void setMotorPowers(double flpower, double frpower, double blpower, double brpower) {
         fldrive.setPower(flpower);
         frdrive.setPower(frpower);
         bldrive.setPower(blpower);
