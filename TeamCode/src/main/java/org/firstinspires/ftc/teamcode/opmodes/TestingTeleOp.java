@@ -12,6 +12,7 @@ public class TestingTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         // ALWAYS SET TELEMETRY AUTOCLEAR to TRUE!!!
+        // otherwise, it overflows the log.
         telemetry.setAutoClear(true);
 
         telemetry.addData("Status", "Initializing");
@@ -27,6 +28,7 @@ public class TestingTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            // FTC controllers have inverted joystick y values
             double yInput = -gamepad1.left_stick_y;
             double xInput = gamepad1.left_stick_x;
             double turnInput = gamepad1.right_stick_x;
