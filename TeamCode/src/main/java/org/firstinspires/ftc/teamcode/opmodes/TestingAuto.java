@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.utility.FieldSide;
 
 import java.util.Objects;
 
-@Autonomous(name = "BasicAuto")
-public class BasicAuto extends LinearOpMode {
+@Autonomous(name = "TestingAuto")
+public class TestingAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         // ALWAYS SET TELEMETRY AUTOCLEAR to TRUE!!!
@@ -36,7 +36,7 @@ public class BasicAuto extends LinearOpMode {
                 drivebase.turnAngle(-90, 1, null);
                 break;
             case Middle:
-                drivebase.driveForward(10,1,null);
+                drivebase.driveForward(10, 1, null);
                 break;
             default:
 

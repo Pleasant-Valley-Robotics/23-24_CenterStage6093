@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 
-@TeleOp(name = "BasicTeleOp")
-public class BasicTeleOp extends LinearOpMode {
+@TeleOp(name = "TestingTeleOp")
+public class TestingTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         // ALWAYS SET TELEMETRY AUTOCLEAR to TRUE!!!
