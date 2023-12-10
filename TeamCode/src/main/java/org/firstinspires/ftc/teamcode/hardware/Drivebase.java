@@ -211,7 +211,7 @@ public class Drivebase {
     public @Api void turnToAngle(double angle, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 10) {
+        while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 1) {
             final double adjustedPower = power * getTurningCorrection(angle);
 
             setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
