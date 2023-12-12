@@ -37,9 +37,9 @@ public class RedCloseAuto extends LinearOpMode {
             sleep(20);
         }
 
-        //Calling driveToBackBoard will call the driveToSpike method first.
         //The CubeSide.Left is only for testing. Once done testing change it back to CubeSide.
-        driveToBackBoard(driveBase, CubeSide.Left);
+        //For now, to test this only call this method.
+        driveToSpike(driveBase, CubeSide.Left);
 
         //Runs after the stop button has been hit on the control hub.
     }
@@ -56,13 +56,24 @@ public class RedCloseAuto extends LinearOpMode {
             case Left:
                 //Include the driveForward 5 inches to drive a little bit away from the wall before turning so it doesn't get hit.
                 //Include telemetry so we can make sure the heading and distance line up with expectations.
+                telemetry.addData("drivingUpdate, ", "Driving for left. Driving away from wall.\n"); //Testing
                 driveBase.driveForward(5, 0.2, telemetry);
-                //This is left so it's negative.
-                driveBase.turnAngle(-10.0, 0.2, telemetry);
+
+                telemetry.addData("drivingUpdate, ", "Driving up to pixel for Left.\n");  //Testing statement.
                 driveBase.driveForward(20.5, 0.2, telemetry);
+
+                //This is left so it's negative.
+                telemetry.addData("turningUpdate, ", "Turning for Left.\n"); //Testing Statement.
+                driveBase.relativeTurn(-10.0, 0.2, telemetry);
+
             case Right:
+                telemetry.addData("drivingUpdate, ", "Driving for right. Driving away from wall.\n"); //Testing.
                 driveBase.driveForward(5, 0, telemetry);
-                driveBase.turnAngle(10.0, 0.2, telemetry);
+
+                telemetry.addData("turningUpdate, ", "Turning for right.\n"); //Testing statement.
+                driveBase.relativeTurn(10.0, 0.2, telemetry);
+
+                telemetry.addData("drivingUpdate, ", "driving up to pixel for right.\n"); //Testing statement.
                 driveBase.driveForward(24.625, 0.2, telemetry);
             case Middle:
                 driveBase.driveForward(26.875, 0.2, telemetry);
@@ -80,24 +91,24 @@ public class RedCloseAuto extends LinearOpMode {
         //Call the driveToSpike method to drive to whatever spike the cube's detected on.
         driveToSpike(driveBase, side);
         //Drive backwards 10 inches to get away from pixel so it doesn't travel with the robot.
-        driveBase.driveForward(-10, 0.5, null);
+        driveBase.driveForward(-10, 0.5, telemetry);
         //if side is...
         switch (side){
             //if the left side is seen by the pipeline then the robot starts facing the 5 degree offset that it was before.
             case Left:
-                driveBase.turnAngle(80, 0.5, null);
-                driveBase.driveForward(56, 0.5, null);
+                driveBase.relativeTurn(80, 0.5, telemetry);
+                driveBase.driveForward(56, 0.5, telemetry);
 
             //if the Right side is seen by the pipeline then the robot starts facing the 20 degree offset it was before.
             case Right:
                 //Use turnAngle because that resets the current angle.
-                driveBase.turnAngle(100, 0.5, null);
-                driveBase.driveForward(35, 0.5, null);
+                driveBase.relativeTurn(100, 0.5, telemetry);
+                driveBase.driveForward(35, 0.5, telemetry);
 
             //if the middle is seen by the pipeline then the robot starts facing the 10 degree offset it was before.
             case Middle:
-                driveBase.turnAngle(90, 0.5,null);
-                driveBase.driveForward(46, 0.5, null);
+                driveBase.relativeTurn(90, 0.5,telemetry);
+                driveBase.driveForward(46, 0.5, telemetry);
         }
     }
 
@@ -117,7 +128,7 @@ public class RedCloseAuto extends LinearOpMode {
         {
             case Left:
                 //Back robot up 5 inches to not run into the board when turning.
-
+                driveBase.driveForward(-5, 0.2, telemetry);
                 //Turn robot to where we want it to go and stay.
 
                 //Drive to where we want it to stop.
@@ -131,4 +142,19 @@ public class RedCloseAuto extends LinearOpMode {
                 //Same thing, with middle measurments.
         }
     }
+
+    /**
+     *
+     * @param driveBase
+     */
+    public static void scoreYellowPixel(Drivebase driveBase){
+        //Allign with backboard depending on what side the pixel's detected.
+
+        //If the pixel's detected on the left side line it up with the left apriltag (ID 1).
+
+        //If the pixel's detected on the right side line it up with the right apriltag (ID 3).
+
+        //If the pixel's detected on the middle spiketape line it up with the middle apriltag (ID 2).
+    }
+
 }

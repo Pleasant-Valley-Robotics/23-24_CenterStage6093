@@ -43,6 +43,7 @@ public class Drivebase {
         bldrive = hardwareMap.get(DcMotor.class, "BLDrive");
         imu = hardwareMap.get(IMU.class, "IMU");
         imu.initialize(new IMU.Parameters(HUB_FACING));
+        imu.resetYaw();
 
         this.opModeIsActive = opModeIsActive;
 
@@ -161,8 +162,8 @@ public class Drivebase {
      * @param power     How fast to drive. (0, 1].
      * @param telemetry Pass telemetry if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
-     * @see Drivebase#turnAngle
-     * @see Drivebase#turnToAngle
+     * @see Drivebase#relativeTurn
+     * @see Drivebase#absoluteTurn
      */
     public @Api void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -183,8 +184,8 @@ public class Drivebase {
      * @param power     How fast to strafe. (0, 1].
      * @param telemetry Pass this if you want the method to log to telemetry.
      * @see Drivebase#driveForward
-     * @see Drivebase#turnAngle
-     * @see Drivebase#turnToAngle
+     * @see Drivebase#relativeTurn
+     * @see Drivebase#absoluteTurn
      */
     public @Api void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -198,21 +199,21 @@ public class Drivebase {
         setMotorPowers(0);
     }
 
+    // stored imu setpoint
+    private double imuSetpoint = 0.0;
+
+
     /**
-     * For auto. Turns to a specified angle, without resetting the heading.
-     *
-     * @param angle     How many degrees to turn. [-180, 180].
-     * @param power     How fast to turn. (0, 1].
-     * @param telemetry Pass this if you want this method to log to telemetry.
-     * @see Drivebase#driveSideways
-     * @see Drivebase#driveForward
-     * @see Drivebase#turnAngle
+     * Turns the robot to the current setpoint.
+     * @param power The speed to turn.
+     * @param telemetry Pass if you want to log to telemetry.
+     * @see Drivebase#imuSetpoint
      */
-    public @Api void turnToAngle(double angle, double power, @Nullable Telemetry telemetry) {
+    private void turnToSetpoint(double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 1) {
-            final double adjustedPower = power * getTurningCorrection(angle);
+        while (opModeIsActive.get() && Math.abs(wrapAngle(getHeading() - imuSetpoint)) > 2) {
+            final double adjustedPower = -power * getTurningCorrection(imuSetpoint);
 
             setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
 
@@ -221,6 +222,37 @@ public class Drivebase {
         }
 
         setMotorPowers(0);
+    }
+
+
+    /**
+     * For auto. Turns to a specified angle, without resetting the heading.
+     *
+     * @param angle     How many degrees to turn. [-180, 180].
+     * @param power     How fast to turn. (0, 1].
+     * @param telemetry Pass this if you want this method to log to telemetry.
+     * @see Drivebase#driveSideways
+     * @see Drivebase#driveForward
+     * @see Drivebase#relativeTurn
+     */
+    public @Api void absoluteTurn(double angle, double power, @Nullable Telemetry telemetry) {
+        imuSetpoint = angle;
+        turnToSetpoint(power, telemetry);
+    }
+
+    /**
+     * For auto. Turns a specified angle in degrees, as an offset from the current heading.
+     *
+     * @param angle     How many degrees to turn. [-180, 180].
+     * @param power     How fast to turn. (0, 1].
+     * @param telemetry Pass this if you want this method to log to telemetry.
+     * @see Drivebase#driveSideways
+     * @see Drivebase#driveForward
+     * @see Drivebase#absoluteTurn
+     */
+    public @Api void relativeTurn(double angle, double power, @Nullable Telemetry telemetry) {
+        imuSetpoint += angle;
+        turnToSetpoint(power, telemetry);
     }
 
     /**
@@ -237,20 +269,7 @@ public class Drivebase {
         return Range.clip(wrapAngle(angle - getHeading()) * TURNING_P_GAIN, -1, 1);
     }
 
-    /**
-     * For auto. Turns a specified angle in degrees, as an offset from the current heading.
-     *
-     * @param angle     How many degrees to turn. [-180, 180].
-     * @param power     How fast to turn. (0, 1].
-     * @param telemetry Pass this if you want this method to log to telemetry.
-     * @see Drivebase#driveSideways
-     * @see Drivebase#driveForward
-     * @see Drivebase#turnToAngle
-     */
-    public @Api void turnAngle(double angle, double power, @Nullable Telemetry telemetry) {
-        imu.resetYaw();
-        turnToAngle(angle, power, telemetry);
-    }
+
 
     /**
      * Waits until the motors are finished moving, or the driver presses stop.

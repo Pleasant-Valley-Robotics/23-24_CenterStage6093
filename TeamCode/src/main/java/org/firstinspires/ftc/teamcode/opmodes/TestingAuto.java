@@ -24,7 +24,8 @@ public class TestingAuto extends LinearOpMode {
         waitForStart();
         // RUNNING CODE.
 
-        drivebase.driveForward(24.0, 0.25, telemetry);
+        for (int i = 0; i < 4; i++) drivebase.relativeTurn(90.0, 0.5, telemetry);
+//        drivebase.driveForward(24.0, 0.25, telemetry);
 
 //        switch (Objects.requireNonNull(camera.getCubePrediction())) {
 //            case Right:
