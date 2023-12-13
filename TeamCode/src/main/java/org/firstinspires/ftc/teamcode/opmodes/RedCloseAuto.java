@@ -56,18 +56,8 @@ public class RedCloseAuto extends LinearOpMode {
 
         //Score the yellow pixel.
         //Store value of apriltag that robot's currently alligned with.
-        switch ()
-        {
-            //If it's left, score with left apriltag.
-            case Left:
-            //Strafe left or right depending on what apriltag it's at right now.
+            //For every apriltag the robot can allign with strafe right or left to get to the tag, move up to it
+            //untill within scoring range, then move the scoring mechanisim to score. 
 
-            //If it's right, score with right apriltag.
-            case Right:
-
-            //If it's middle, score with middle apriltag.
-            case Middle:
-
-        }
     }
 }
