@@ -205,7 +205,8 @@ public class Drivebase {
 
     /**
      * Turns the robot to the current setpoint.
-     * @param power The speed to turn.
+     *
+     * @param power     The speed to turn.
      * @param telemetry Pass if you want to log to telemetry.
      * @see Drivebase#imuSetpoint
      */
@@ -213,7 +214,7 @@ public class Drivebase {
         setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
         while (opModeIsActive.get() && Math.abs(wrapAngle(getHeading() - imuSetpoint)) > 2) {
-            final double adjustedPower = -power * getTurningCorrection(imuSetpoint);
+            final double adjustedPower = Math.abs(power) * getTurningCorrection(imuSetpoint);
 
             setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
 
@@ -257,6 +258,7 @@ public class Drivebase {
 
     /**
      * Ensures that an angle is within [-180, 180].
+     *
      * @param n Angle in degrees.
      * @return Angle wrapped into [-180, 180].
      */
@@ -266,9 +268,8 @@ public class Drivebase {
     }
 
     private double getTurningCorrection(double angle) {
-        return Range.clip(wrapAngle(angle - getHeading()) * TURNING_P_GAIN, -1, 1);
+        return Range.clip(wrapAngle(getHeading() - angle) * TURNING_P_GAIN, -1, 1);
     }
-
 
 
     /**
