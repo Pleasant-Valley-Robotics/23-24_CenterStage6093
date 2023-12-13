@@ -3,36 +3,28 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.hardware.Drivebase;
+import org.firstinspires.ftc.teamcode.hardware.Suspension;
 
 @TeleOp(name = "Jaren's TestTele")
 public class TeleOpTestFOME extends LinearOpMode {
     @Override
     public void runOpMode() {
-        Servo servo;
-
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        servo = hardwareMap.get(Servo.class, "Servo");
-
         waitForStart();
         while (opModeIsActive()) {
-            // FTC controllers have inverted joystick y values
+            Suspension suspension = new Suspension(hardwareMap);
+            Drivebase drivebase = new Drivebase(hardwareMap, null);
 
-            servo.setPosition(gamepad1.right_stick_y);
+            drivebase.mecanumDrive(gamepad1);
 
-            double servopos = servo.getPosition();
-            telemetry.addData("ServoPos", servopos);
-
-
-            telemetry.addData("Status", "Running");
-            telemetry.update();
+            suspension.spoolDaSpool(gamepad2, null);
         }
 
         telemetry.clearAll();
-
         telemetry.addData("Status", "Finished");
         telemetry.update();
     }

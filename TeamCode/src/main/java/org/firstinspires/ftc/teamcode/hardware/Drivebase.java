@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
@@ -132,12 +133,12 @@ public class Drivebase {
 
     /**
      * For use in teleop, controlled by a controller.
-     *
-     * @param yInput    Driving input. Negative is back, positive is forward. [-1, 1].
-     * @param xInput    Strafing input. Negative is left, positive is right. [-1, 1].
-     * @param turnInput Turning input. Negative is ccw, positive is clockwise. [-1, 1].
+     * @param gamepad The gamepad to fetch inputs from.
      */
-    public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
+    public @Api void mecanumDrive(Gamepad gamepad) {
+        double turnInput = gamepad.right_stick_x;
+        double yInput = -gamepad.left_stick_y;
+        double xInput = gamepad.left_stick_x;
         double frontLeft = yInput + xInput + turnInput;
         double frontRight = yInput - xInput - turnInput;
         double backLeft = yInput - xInput + turnInput;
