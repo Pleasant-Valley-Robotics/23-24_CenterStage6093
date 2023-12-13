@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
+import org.firstinspires.ftc.teamcode.hardware.PixelDropper;
 
 @TeleOp(name = "TestingTeleOp")
 public class TestingTeleOp extends LinearOpMode {
@@ -19,6 +20,7 @@ public class TestingTeleOp extends LinearOpMode {
         telemetry.update();
 
         Drivebase drivebase = new Drivebase(hardwareMap, null);
+        PixelDropper dropper = new PixelDropper(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -28,6 +30,8 @@ public class TestingTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            if (gamepad1.triangle) dropper.dropPixel();
+
             // FTC controllers have inverted joystick y values
             double yInput = -gamepad1.left_stick_y;
             double xInput = gamepad1.left_stick_x;
