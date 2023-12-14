@@ -220,6 +220,7 @@ public class Drivebase {
             setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
 
             if (telemetry == null) continue;
+            telemetry.addData("AP", adjustedPower);
             addTelemetry(telemetry);
         }
 

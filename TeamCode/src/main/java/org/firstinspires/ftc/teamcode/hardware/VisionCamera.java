@@ -55,7 +55,6 @@ public class VisionCamera {
      * @param windowSize Number of times that we see the same cube in a row in order to be confident.
      * @return the current position prediction once it has been seen windowSize times in a row.
      */
-    @Nullable
     public @Api CubeSide getStableCubePrediction(int windowSize) throws InterruptedException {
         CubeSide lastSide = null;
         int cubeCount = 0;

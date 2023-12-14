@@ -17,8 +17,9 @@ public class PixelDropper {
         try {
             servo.setPosition(1);
             // wait 2s for servo to get there
-            Thread.sleep(2000);
+            Thread.sleep(1400);
             servo.setPosition(-1);
+            Thread.sleep(1400);
         } catch (InterruptedException ignored) {
         }
     }
