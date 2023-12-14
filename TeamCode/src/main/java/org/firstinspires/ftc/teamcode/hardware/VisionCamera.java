@@ -22,7 +22,7 @@ public class VisionCamera {
 
     /**
      * @param hardwareMap The hardwareMap to initialize the camera with.
-     * @param fieldSide The side of the field this auto is running on.
+     * @param fieldSide   The side of the field this auto is running on.
      */
     public VisionCamera(HardwareMap hardwareMap, FieldSide fieldSide) {
         WebcamName camera = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -40,6 +40,7 @@ public class VisionCamera {
 
     /**
      * Adds this camera's data to telemetry.
+     *
      * @param telemetry The telemetry object to add to.
      */
     public @Api void addTelemetry(Telemetry telemetry) {
@@ -50,10 +51,21 @@ public class VisionCamera {
     /**
      * For use in auto to find which side our custom game object is on.
      * The custom game object must be a cube with the color of the side that the auto is being run in.
-     * @return the current position prediction, or null if it can't see one.
+     *
+     * @param windowSize Number of times that we see the same cube in a row in order to be confident.
+     * @return the current position prediction once it has been seen windowSize times in a row.
      */
     @Nullable
-    public @Api CubeSide getCubePrediction() {
-        return pipeline.getCubeSide();
+    public @Api CubeSide getStableCubePrediction(int windowSize) throws InterruptedException {
+        CubeSide lastSide = null;
+        int cubeCount = 0;
+
+        while (cubeCount < windowSize || lastSide == null) {
+            Thread.sleep(20);
+            if (lastSide == (lastSide = pipeline.getCubeSide())) ++cubeCount;
+            else cubeCount = 0;
+        }
+
+        return lastSide;
     }
 }
