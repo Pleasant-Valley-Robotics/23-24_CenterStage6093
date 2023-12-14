@@ -47,8 +47,6 @@ public class VisionCamera {
                 .build();
 
         disableDetection();
-        this.portal.resumeStreaming();
-        this.portal.resumeLiveView();
     }
 
     /**
