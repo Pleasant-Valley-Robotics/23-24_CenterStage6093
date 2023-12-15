@@ -106,10 +106,13 @@ public class VisionCamera {
     /**
      * Gets all of the last visible apriltags.
      *
-     * @return list of apriltags.
+     * @param tagId The tag id to look for.
+     * @return A tag with the same id as tagId, or null if it can't see it.
      */
     @Nullable
-    public @Api List<AprilTagDetection> getAprilTags() {
-        return apriltags.getDetections();
+    public @Api AprilTagDetection getTagById(int tagId) {
+        List<AprilTagDetection> detections = apriltags.getFreshDetections();
+        if (detections == null) return null;
+        return detections.stream().filter(x -> x.id == tagId).findFirst().orElse(null);
     }
 }
