@@ -3,11 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes.DefaultAutos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 import org.firstinspires.ftc.teamcode.hardware.PixelDropper;
-import org.firstinspires.ftc.teamcode.hardware.Suspension;
 import org.firstinspires.ftc.teamcode.hardware.VisionCamera;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
@@ -22,11 +20,14 @@ public class RedCloseAuto extends LinearOpMode {
         PixelDropper pixelDropper = new PixelDropper(hardwareMap);
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.RedClose);
+        camera.enableCubePipeline();
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
         CubeSide side = camera.getStableCubePrediction(15);
+        camera.disableDetection();
         drivebase.driveForward(20.0, 0.3, telemetry);
         drivebase.driveForward(6.0, 0.2, telemetry);
         switch (side) {
@@ -49,15 +50,19 @@ public class RedCloseAuto extends LinearOpMode {
 
         drivebase.driveForward(30, 0.4, telemetry);
         drivebase.driveSideways(-20, 0.3, telemetry);
+        camera.enableAprilTags();
 
         switch (side) {
             case Middle:
+                drivebase.centerToAprilTag(10, () -> camera.getTagById(1));
                 break;
             case Left:
+                drivebase.centerToAprilTag(10, () -> camera.getTagById(1));
                 drivebase.driveSideways(-8, 0.3, telemetry);
                 break;
             case Right:
-                drivebase.driveSideways(1 , 0.3, telemetry);
+                drivebase.centerToAprilTag(10, () -> camera.getTagById(1));
+                drivebase.driveSideways(1, 0.3, telemetry);
                 break;
         }
 
