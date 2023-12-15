@@ -54,14 +54,14 @@ public class RedCloseAuto extends LinearOpMode {
 
         switch (side) {
             case Middle:
-                drivebase.centerToAprilTag(10, () -> camera.getTagById(1));
+                drivebase.centerToAprilTag(10, camera.getTagById(1));
                 break;
             case Left:
-                drivebase.centerToAprilTag(10, () -> camera.getTagById(1));
+                drivebase.centerToAprilTag(10, camera.getTagById(1));
                 drivebase.driveSideways(-8, 0.3, telemetry);
                 break;
             case Right:
-                drivebase.centerToAprilTag(10, () -> camera.getTagById(1));
+                drivebase.centerToAprilTag(10, camera.getTagById(1));
                 drivebase.driveSideways(1, 0.3, telemetry);
                 break;
         }
