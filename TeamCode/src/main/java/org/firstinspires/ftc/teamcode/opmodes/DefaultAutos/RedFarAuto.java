@@ -23,14 +23,14 @@ public class RedFarAuto extends LinearOpMode {
         waitForStart();
         CubeSide side = camera.getStableCubePrediction(15);
 
-        drivebase.driveForward(20.0, 0.3, telemetry);
-        drivebase.driveForward(6.0, 0.2, telemetry);
+        drivebase.driveForward(6.0, 0.2, null);
+        drivebase.driveForward(20.0, 0.3, null);
         switch (side) {
             case Right:
-                drivebase.relativeTurn(-65, 0.6, telemetry);
+                drivebase.relativeTurn(-65, 0.6, null);
                 break;
             case Left:
-                drivebase.relativeTurn(65, 0.6, telemetry);
+                drivebase.relativeTurn(65, 0.6, null);
                 break;
             case Middle:
                 break;
@@ -57,13 +57,16 @@ public class RedFarAuto extends LinearOpMode {
 
         switch(side) {
             case Right:
+                    drivebase.driveSideways(2,0.5,null);
+                    drivebase.centerToAprilTag(10, camera.getTagById(1));
 
                 break;
             case Left:
 
+                drivebase.centerToAprilTag(10, camera.getTagById(1));
                 break;
             case Middle:
-
+                drivebase.centerToAprilTag(10, camera.getTagById(1));
                 break;
         }
 

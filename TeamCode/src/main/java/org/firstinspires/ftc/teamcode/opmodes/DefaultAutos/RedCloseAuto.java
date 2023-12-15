@@ -62,8 +62,8 @@ public class RedCloseAuto extends LinearOpMode {
                 break;
         }
 
-        drivebase.driveForward(4.5, 0.4, telemetry);
-        drivebase.driveForward(-4.5, 0.4, telemetry);
+        drivebase.driveForward(6, 0.4, telemetry);
+        drivebase.driveForward(-6, 0.4, telemetry);
 
         drivebase.absoluteTurn(0, 0.5, telemetry);
         drivebase.driveForward(-12, 0.5, telemetry);
@@ -89,7 +89,7 @@ public class RedCloseAuto extends LinearOpMode {
                 break;
         }
 
-        drivebase.driveForward(4.5, 0.5, telemetry);
+        drivebase.driveForward(7, 0.5, telemetry);
         pixelDropper.dropPixel();
         drivebase.driveForward(-2.5, 0.5, null);
 

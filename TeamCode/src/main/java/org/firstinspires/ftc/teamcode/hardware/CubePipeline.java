@@ -38,7 +38,7 @@ public class CubePipeline implements VisionProcessor {
     private static final Scalar blueMaxs = new Scalar(255, 255, 255);
     private static final Scalar redMins = new Scalar(0, 160, 0);
     private static final Scalar redMaxs = new Scalar(255, 255, 255);
-    private static final double crop_x = 90;
+    private static final double crop_x = 50;
     private static final double crop_y = 130;
     private static final int cutoff_left = 349;
     private static final int cutoff_right = 606;
