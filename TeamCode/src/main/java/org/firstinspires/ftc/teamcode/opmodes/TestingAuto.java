@@ -30,7 +30,7 @@ public class TestingAuto extends LinearOpMode {
 
         for (int i = 0; i < 19; i++) {
             sleep(100);
-            AprilTagDetection detection = camera.getTagById(3);
+            AprilTagDetection detection = camera.getTagById(3).get();
             if (detection == null) {
                 telemetry.addData("x", "");
                 telemetry.addData("y", "");
@@ -43,7 +43,7 @@ public class TestingAuto extends LinearOpMode {
 
         telemetry.update();
 
-        drivebase.centerToAprilTag(10, () -> camera.getTagById(3));
+        drivebase.centerToAprilTag(10, camera.getTagById(3));
 
 
         telemetry.addData("Status", "Running");

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Contains all the vision logic we use on the robot.
@@ -104,15 +105,16 @@ public class VisionCamera {
     }
 
     /**
-     * Gets all of the last visible apriltags.
+     * Returns a Supplier that fetches a specific tag id.
      *
      * @param tagId The tag id to look for.
-     * @return A tag with the same id as tagId, or null if it can't see it.
+     * @return Callback that gets tag with the same id as tagId, or null if it can't see it.
      */
-    @Nullable
-    public @Api AprilTagDetection getTagById(int tagId) {
-        List<AprilTagDetection> detections = apriltags.getFreshDetections();
-        if (detections == null) return null;
-        return detections.stream().filter(x -> x.id == tagId).findFirst().orElse(null);
+    public @Api Supplier<AprilTagDetection> getTagById(int tagId) {
+        return () -> {
+            List<AprilTagDetection> detections = apriltags.getFreshDetections();
+            if (detections == null) return null;
+            return detections.stream().filter(x -> x.id == tagId).findFirst().orElse(null);
+        };
     }
 }
