@@ -169,8 +169,18 @@ public class Drivebase {
         // - Strafe, to center x.
         // - Drive, to center y.
 
-        imuSetpoint = -90;
-        turnToSetpoint(0.5, null);
+        double yOffset;
+        double xOffset;
+        double yawOffset;
+        AprilTagDetection latestDetection;
+
+//        do {
+//            while ()
+//
+//        } while (yOffset > 0.2 && xOffset > 0.2 && yawOffset > 0.2);
+
+
+
 
         Thread.sleep(600);
 
