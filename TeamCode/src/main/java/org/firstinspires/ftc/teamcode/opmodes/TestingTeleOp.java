@@ -22,7 +22,8 @@ public class TestingTeleOp extends LinearOpMode {
         telemetry.update();
 
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
-        DroneLauncher launcher = new DroneLauncher(hardwareMap, null);
+
+        DroneLauncher launcher = new DroneLauncher(hardwareMap, telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
