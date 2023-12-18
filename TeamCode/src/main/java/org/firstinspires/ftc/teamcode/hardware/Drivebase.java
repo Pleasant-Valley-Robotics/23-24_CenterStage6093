@@ -169,8 +169,8 @@ public class Drivebase {
         double yPropErrorInches;
         double yawPropErrorDegrees;
 
-        double xDerErrorTicksPerSec;
-        double yDerErrorTicksPerSec;
+        double xDerErrorInchPerSec;
+        double yDerErrorInchPerSec;
 
         AprilTagDetection latestDetection;
         while ((latestDetection = getDetection.get()) == null) Thread.sleep(100);
@@ -182,11 +182,11 @@ public class Drivebase {
 
             while ((latestDetection = getDetection.get()) == null) {
                 yawPropErrorDegrees = 90 - getHeading();
-                xDerErrorTicksPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / 2;
-                yDerErrorTicksPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / 2;
+                xDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
+                yDerErrorInchPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / (2 * ENCODER_PER_INCH);
 
-                double xPower = xPropErrorInches * APRILTAGS.X_P_GAIN + xDerErrorTicksPerSec * APRILTAGS.X_D_GAIN;
-                double yPower = yPropErrorInches * APRILTAGS.Y_P_GAIN + yDerErrorTicksPerSec * APRILTAGS.Y_D_GAIN;
+                double xPower = xPropErrorInches * APRILTAGS.X_P_GAIN + xDerErrorInchPerSec * APRILTAGS.X_D_GAIN;
+                double yPower = yPropErrorInches * APRILTAGS.Y_P_GAIN + yDerErrorInchPerSec * APRILTAGS.Y_D_GAIN;
                 double yawPower = yawPropErrorDegrees * APRILTAGS.YAW_P_GAIN;
 
                 mecanumDrive(yPower, xPower, yawPower);
