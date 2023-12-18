@@ -137,7 +137,9 @@ public class Drivebase {
     /**
      * For use in teleop, controlled by a controller.
      *
-     * @param gamepad The gamepad to fetch inputs from.
+     * @param yInput Driving forward power.[-1, 1].
+     * @param xInput Strafing power. Negative is left. [-1, 1].
+     * @param turnInput Turning power. Positive is right. [-1, 1].
      */
     public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
         double frontLeft = yInput + xInput + turnInput;
