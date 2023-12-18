@@ -165,30 +165,30 @@ public class Drivebase {
      * @param getDetection Source of detections to center to.
      */
     public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) {
-        double xPropErrorInches = 0;
         double yPropErrorInches = 0;
+        double xPropErrorInches = 0;
         double yawPropErrorDegrees;
 
-        double xDerErrorInchPerSec;
         double yDerErrorInchPerSec;
+        double xDerErrorInchPerSec;
 
         AprilTagDetection latestDetection;
 
         do {
             do {
                 yawPropErrorDegrees = 90 - getHeading();
-                xDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
-                yDerErrorInchPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / (2 * ENCODER_PER_INCH);
+                yDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
+                xDerErrorInchPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / (2 * ENCODER_PER_INCH);
 
-                double xPower = xPropErrorInches * APRILTAGS.X_P_GAIN + xDerErrorInchPerSec * APRILTAGS.X_D_GAIN;
                 double yPower = yPropErrorInches * APRILTAGS.Y_P_GAIN + yDerErrorInchPerSec * APRILTAGS.Y_D_GAIN;
+                double xPower = xPropErrorInches * APRILTAGS.X_P_GAIN + xDerErrorInchPerSec * APRILTAGS.X_D_GAIN;
                 double yawPower = yawPropErrorDegrees * APRILTAGS.YAW_P_GAIN;
 
                 mecanumDrive(yPower, xPower, yawPower);
             } while ((latestDetection = getDetection.get()) == null);
 
-            xPropErrorInches = -latestDetection.ftcPose.x;
             yPropErrorInches = distance - latestDetection.ftcPose.y;
+            xPropErrorInches = -latestDetection.ftcPose.x;
         } while (yawPropErrorDegrees > 2 && xPropErrorInches > 0.1 && yPropErrorInches > 0.1);
     }
 
