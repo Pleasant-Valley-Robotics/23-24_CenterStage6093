@@ -36,7 +36,11 @@ public class TestingTeleOp extends LinearOpMode {
             if (gamepad1.right_bumper) launcher.LaunchDathOe();
             // FTC controllers have inverted joystick y values
 
-            drivebase.mecanumDrive(gamepad1);
+            double yInput = -gamepad1.left_stick_y;
+            double xInput = gamepad1.left_stick_x;
+            double turnInput = gamepad1.right_stick_x;
+
+            drivebase.mecanumDrive(yInput, xInput, turnInput);
             drivebase.addTelemetry(telemetry);
 
             telemetry.addData("Status", "Running");

@@ -136,12 +136,10 @@ public class Drivebase {
 
     /**
      * For use in teleop, controlled by a controller.
+     *
      * @param gamepad The gamepad to fetch inputs from.
      */
-    public @Api void mecanumDrive(Gamepad gamepad) {
-        double turnInput = gamepad.right_stick_x;
-        double yInput = -gamepad.left_stick_y;
-        double xInput = gamepad.left_stick_x;
+    public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
         double frontLeft = yInput + xInput + turnInput;
         double frontRight = yInput - xInput - turnInput;
         double backLeft = yInput - xInput + turnInput;
