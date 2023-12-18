@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
@@ -163,91 +162,7 @@ public class Drivebase {
      * @param distance     How far away from the tag you want to be, in inches.
      * @param getDetection Source of detections to center to.
      */
-    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) throws InterruptedException {
-        // This does three steps:
-        // - Turn to face the apriltags.
-        // - Strafe, to center x.
-        // - Drive, to center y.
-
-        double yOffset;
-        double xOffset;
-        double yawOffset;
-        AprilTagDetection latestDetection;
-
-//        do {
-//            while ()
-//
-//        } while (yOffset > 0.2 && xOffset > 0.2 && yawOffset > 0.2);
-
-
-
-
-        Thread.sleep(600);
-
-        AprilTagDetection detection = getDetection.get();
-        if (detection == null) return;
-
-        driveSideways(detection.ftcPose.x, 0.4, null);
-        driveForward(detection.ftcPose.y - distance, 0.4, null);
-
-        Thread.sleep(300);
-
-        detection = getDetection.get();
-        if (detection == null) return;
-
-        driveSideways(detection.ftcPose.x * 1.2, 0.4, null);
-        driveForward(detection.ftcPose.y - distance, 0.4, null);
-
-//        try {
-//            double tagOffsetX = 30;
-//
-//            do {
-//                AprilTagDetection detection = getDetection.get();
-//                if (detection == null) {
-//                    setMotorPowers(0);
-//                    continue;
-//                }
-//
-//                tagOffsetX = detection.ftcPose.x;
-//
-////                double strafePower = Range.clip(tagOffsetX * STRAFING_P_GAIN, -1, 1);
-//                double strafePower;
-//                if (tagOffsetX > 0) {
-//                    strafePower = 0.1;
-//                } else {
-//                    strafePower = -0.1;
-//                }
-//
-//                setMotorPowers(strafePower, -strafePower, -strafePower, strafePower);
-//                Thread.sleep(100);
-//            } while (Math.abs(tagOffsetX) > 0.05);
-//
-//            turnToSetpoint(0.5, null);
-//
-//            double tagOffsetY = 30;
-//
-//            do {
-//                AprilTagDetection detection = getDetection.get();
-//                if (detection == null) {
-//                    setMotorPowers(0);
-//                    continue;
-//                }
-//
-//                tagOffsetY = detection.ftcPose.y - distance;
-//
-////                double drivePower = Range.clip(tagOffsetY * STRAFING_P_GAIN, -1, 1);
-//                double drivePower;
-//                if (tagOffsetY > 0) {
-//                    drivePower = 0.1;
-//                } else {
-//                    drivePower = -0.1;
-//                }
-//
-//                setMotorPowers(drivePower);
-//                Thread.sleep(100);
-//            } while (Math.abs(tagOffsetY) > 0.05);
-//        } catch (InterruptedException ignored) {
-//        }
+    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) {
     }
 
     /**
