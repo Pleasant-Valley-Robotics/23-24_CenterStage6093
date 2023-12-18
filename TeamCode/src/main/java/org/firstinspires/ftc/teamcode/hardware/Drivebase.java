@@ -138,8 +138,8 @@ public class Drivebase {
     /**
      * For use in teleop, controlled by a controller.
      *
-     * @param yInput Driving forward power.[-1, 1].
-     * @param xInput Strafing power. Negative is left. [-1, 1].
+     * @param yInput    Driving forward power.[-1, 1].
+     * @param xInput    Strafing power. Negative is left. [-1, 1].
      * @param turnInput Turning power. Positive is right. [-1, 1].
      */
     public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
@@ -178,9 +178,8 @@ public class Drivebase {
         do {
             xPropErrorInches = -latestDetection.ftcPose.x;
             yPropErrorInches = distance - latestDetection.ftcPose.y;
-            yawPropErrorDegrees = 90 - getHeading();
 
-            while ((latestDetection = getDetection.get()) == null) {
+            do {
                 yawPropErrorDegrees = 90 - getHeading();
                 xDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
                 yDerErrorInchPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / (2 * ENCODER_PER_INCH);
@@ -190,7 +189,7 @@ public class Drivebase {
                 double yawPower = yawPropErrorDegrees * APRILTAGS.YAW_P_GAIN;
 
                 mecanumDrive(yPower, xPower, yawPower);
-            }
+            } while ((latestDetection = getDetection.get()) == null);
         } while (yawPropErrorDegrees > 2 && xPropErrorInches > 0.1 && yPropErrorInches > 0.1);
     }
 
