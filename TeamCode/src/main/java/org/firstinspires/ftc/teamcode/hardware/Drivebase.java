@@ -164,21 +164,17 @@ public class Drivebase {
      * @param distance     How far away from the tag you want to be, in inches.
      * @param getDetection Source of detections to center to.
      */
-    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) throws InterruptedException {
-        double xPropErrorInches;
-        double yPropErrorInches;
+    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) {
+        double xPropErrorInches = 0;
+        double yPropErrorInches = 0;
         double yawPropErrorDegrees;
 
         double xDerErrorInchPerSec;
         double yDerErrorInchPerSec;
 
         AprilTagDetection latestDetection;
-        while ((latestDetection = getDetection.get()) == null) Thread.sleep(100);
 
         do {
-            xPropErrorInches = -latestDetection.ftcPose.x;
-            yPropErrorInches = distance - latestDetection.ftcPose.y;
-
             do {
                 yawPropErrorDegrees = 90 - getHeading();
                 xDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
@@ -190,6 +186,9 @@ public class Drivebase {
 
                 mecanumDrive(yPower, xPower, yawPower);
             } while ((latestDetection = getDetection.get()) == null);
+
+            xPropErrorInches = -latestDetection.ftcPose.x;
+            yPropErrorInches = distance - latestDetection.ftcPose.y;
         } while (yawPropErrorDegrees > 2 && xPropErrorInches > 0.1 && yPropErrorInches > 0.1);
     }
 
