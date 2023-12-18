@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.utility.Config.APRILTAGS;
 import static org.firstinspires.ftc.teamcode.utility.Config.ENCODER_PER_INCH;
 import static org.firstinspires.ftc.teamcode.utility.Config.HUB_FACING;
 import static org.firstinspires.ftc.teamcode.utility.Config.TURNING_P_GAIN;
@@ -7,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.utility.Config.TURNING_P_GAIN;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -23,11 +25,11 @@ import java.util.function.Supplier;
  * Class that contains the entire drivebase for the robot. Contains methods to move the robot both in auto and in teleop.
  */
 public class Drivebase {
-    private final DcMotor frdrive;
+    private final DcMotorEx frdrive;
 
-    private final DcMotor fldrive;
-    private final DcMotor brdrive;
-    private final DcMotor bldrive;
+    private final DcMotorEx fldrive;
+    private final DcMotorEx brdrive;
+    private final DcMotorEx bldrive;
     private final IMU imu;
     private final Supplier<Boolean> opModeIsActive;
 
@@ -39,10 +41,10 @@ public class Drivebase {
      * @param opModeIsActive Supplier that returns false if the program needs to stop.
      */
     public @Api Drivebase(HardwareMap hardwareMap, Supplier<Boolean> opModeIsActive) {
-        frdrive = hardwareMap.get(DcMotor.class, "FRDrive");
-        fldrive = hardwareMap.get(DcMotor.class, "FLDrive");
-        brdrive = hardwareMap.get(DcMotor.class, "BRDrive");
-        bldrive = hardwareMap.get(DcMotor.class, "BLDrive");
+        frdrive = hardwareMap.get(DcMotorEx.class, "FRDrive");
+        fldrive = hardwareMap.get(DcMotorEx.class, "FLDrive");
+        brdrive = hardwareMap.get(DcMotorEx.class, "BRDrive");
+        bldrive = hardwareMap.get(DcMotorEx.class, "BLDrive");
         imu = hardwareMap.get(IMU.class, "IMU");
         imu.initialize(new IMU.Parameters(HUB_FACING));
         imu.resetYaw();
