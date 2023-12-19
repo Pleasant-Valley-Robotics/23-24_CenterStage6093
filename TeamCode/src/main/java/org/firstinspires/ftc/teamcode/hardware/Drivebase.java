@@ -8,14 +8,17 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utility.Api;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.function.Supplier;
 
 /**
  * Class that contains the entire drivebase for the robot. Contains methods to move the robot both in auto and in teleop.
@@ -43,6 +46,7 @@ public class Drivebase {
         bldrive = hardwareMap.get(DcMotor.class, "BLDrive");
         imu = hardwareMap.get(IMU.class, "IMU");
         imu.initialize(new IMU.Parameters(HUB_FACING));
+        imu.resetYaw();
 
         this.opModeIsActive = opModeIsActive;
 
@@ -133,9 +137,9 @@ public class Drivebase {
     /**
      * For use in teleop, controlled by a controller.
      *
-     * @param yInput    Driving input. Negative is back, positive is forward. [-1, 1].
-     * @param xInput    Strafing input. Negative is left, positive is right. [-1, 1].
-     * @param turnInput Turning input. Negative is ccw, positive is clockwise. [-1, 1].
+     * @param yInput Driving forward power.[-1, 1].
+     * @param xInput Strafing power. Negative is left. [-1, 1].
+     * @param turnInput Turning power. Positive is right. [-1, 1].
      */
     public @Api void mecanumDrive(double yInput, double xInput, double turnInput) {
         double frontLeft = yInput + xInput + turnInput;
@@ -153,6 +157,98 @@ public class Drivebase {
         );
     }
 
+    /**
+     * For use in auto. Centers the robot to an apriltag, at a specified distance.
+     *
+     * @param distance     How far away from the tag you want to be, in inches.
+     * @param getDetection Source of detections to center to.
+     */
+    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) throws InterruptedException {
+        // This does three steps:
+        // - Turn to face the apriltags.
+        // - Strafe, to center x.
+        // - Drive, to center y.
+
+        double yOffset;
+        double xOffset;
+        double yawOffset;
+        AprilTagDetection latestDetection;
+
+//        do {
+//            while ()
+//
+//        } while (yOffset > 0.2 && xOffset > 0.2 && yawOffset > 0.2);
+
+
+
+
+        Thread.sleep(600);
+
+        AprilTagDetection detection = getDetection.get();
+        if (detection == null) return;
+
+        driveSideways(detection.ftcPose.x, 0.4, null);
+        driveForward(detection.ftcPose.y - distance, 0.4, null);
+
+        Thread.sleep(300);
+
+        detection = getDetection.get();
+        if (detection == null) return;
+
+        driveSideways(detection.ftcPose.x * 1.2, 0.4, null);
+        driveForward(detection.ftcPose.y - distance, 0.4, null);
+
+//        try {
+//            double tagOffsetX = 30;
+//
+//            do {
+//                AprilTagDetection detection = getDetection.get();
+//                if (detection == null) {
+//                    setMotorPowers(0);
+//                    continue;
+//                }
+//
+//                tagOffsetX = detection.ftcPose.x;
+//
+////                double strafePower = Range.clip(tagOffsetX * STRAFING_P_GAIN, -1, 1);
+//                double strafePower;
+//                if (tagOffsetX > 0) {
+//                    strafePower = 0.1;
+//                } else {
+//                    strafePower = -0.1;
+//                }
+//
+//                setMotorPowers(strafePower, -strafePower, -strafePower, strafePower);
+//                Thread.sleep(100);
+//            } while (Math.abs(tagOffsetX) > 0.05);
+//
+//            turnToSetpoint(0.5, null);
+//
+//            double tagOffsetY = 30;
+//
+//            do {
+//                AprilTagDetection detection = getDetection.get();
+//                if (detection == null) {
+//                    setMotorPowers(0);
+//                    continue;
+//                }
+//
+//                tagOffsetY = detection.ftcPose.y - distance;
+//
+////                double drivePower = Range.clip(tagOffsetY * STRAFING_P_GAIN, -1, 1);
+//                double drivePower;
+//                if (tagOffsetY > 0) {
+//                    drivePower = 0.1;
+//                } else {
+//                    drivePower = -0.1;
+//                }
+//
+//                setMotorPowers(drivePower);
+//                Thread.sleep(100);
+//            } while (Math.abs(tagOffsetY) > 0.05);
+//        } catch (InterruptedException ignored) {
+//        }
+    }
 
     /**
      * For use in auto. Drives forward a specified distance, using the encoders.
@@ -161,8 +257,8 @@ public class Drivebase {
      * @param power     How fast to drive. (0, 1].
      * @param telemetry Pass telemetry if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
-     * @see Drivebase#turnAngle
-     * @see Drivebase#turnToAngle
+     * @see Drivebase#relativeTurn
+     * @see Drivebase#absoluteTurn
      */
     public @Api void driveForward(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -183,8 +279,8 @@ public class Drivebase {
      * @param power     How fast to strafe. (0, 1].
      * @param telemetry Pass this if you want the method to log to telemetry.
      * @see Drivebase#driveForward
-     * @see Drivebase#turnAngle
-     * @see Drivebase#turnToAngle
+     * @see Drivebase#relativeTurn
+     * @see Drivebase#absoluteTurn
      */
     public @Api void driveSideways(double inches, double power, @Nullable Telemetry telemetry) {
         setMotorModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -198,6 +294,34 @@ public class Drivebase {
         setMotorPowers(0);
     }
 
+    // stored imu setpoint
+    private double imuSetpoint = 0.0;
+
+
+    /**
+     * Turns the robot to the current setpoint.
+     *
+     * @param power     The speed to turn.
+     * @param telemetry Pass if you want to log to telemetry.
+     * @see Drivebase#imuSetpoint
+     */
+    private void turnToSetpoint(double power, @Nullable Telemetry telemetry) {
+        setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        while (opModeIsActive.get() && Math.abs(wrapAngle(getHeading() - imuSetpoint)) > 2) {
+            final double adjustedPower = Math.abs(power) * getTurningCorrection(imuSetpoint);
+
+            setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
+
+            if (telemetry == null) continue;
+            telemetry.addData("AP", adjustedPower);
+            addTelemetry(telemetry);
+        }
+
+        setMotorPowers(0);
+    }
+
+
     /**
      * For auto. Turns to a specified angle, without resetting the heading.
      *
@@ -206,35 +330,11 @@ public class Drivebase {
      * @param telemetry Pass this if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#driveForward
-     * @see Drivebase#turnAngle
+     * @see Drivebase#relativeTurn
      */
-    public @Api void turnToAngle(double angle, double power, @Nullable Telemetry telemetry) {
-        setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        while (opModeIsActive.get() && Math.abs(getHeading() - angle) > 10) {
-            final double adjustedPower = power * getTurningCorrection(angle);
-
-            setMotorPowers(adjustedPower, -adjustedPower, adjustedPower, -adjustedPower);
-
-            if (telemetry == null) continue;
-            addTelemetry(telemetry);
-        }
-
-        setMotorPowers(0);
-    }
-
-    /**
-     * Ensures that an angle is within [-180, 180].
-     * @param n Angle in degrees.
-     * @return Angle wrapped into [-180, 180].
-     */
-    private static double wrapAngle(double n) {
-        double x = (n % 360 + 360) % 360;
-        return x < 180 ? x : x - 360;
-    }
-
-    private double getTurningCorrection(double angle) {
-        return Range.clip(wrapAngle(angle - getHeading()) * TURNING_P_GAIN, -1, 1);
+    public @Api void absoluteTurn(double angle, double power, @Nullable Telemetry telemetry) {
+        imuSetpoint = angle;
+        turnToSetpoint(power, telemetry);
     }
 
     /**
@@ -245,12 +345,28 @@ public class Drivebase {
      * @param telemetry Pass this if you want this method to log to telemetry.
      * @see Drivebase#driveSideways
      * @see Drivebase#driveForward
-     * @see Drivebase#turnToAngle
+     * @see Drivebase#absoluteTurn
      */
-    public @Api void turnAngle(double angle, double power, @Nullable Telemetry telemetry) {
-        imu.resetYaw();
-        turnToAngle(angle, power, telemetry);
+    public @Api void relativeTurn(double angle, double power, @Nullable Telemetry telemetry) {
+        imuSetpoint += angle;
+        turnToSetpoint(power, telemetry);
     }
+
+    /**
+     * Ensures that an angle is within [-180, 180].
+     *
+     * @param n Angle in degrees.
+     * @return Angle wrapped into [-180, 180].
+     */
+    private static double wrapAngle(double n) {
+        double x = (n % 360 + 360) % 360;
+        return x < 180 ? x : x - 360;
+    }
+
+    private double getTurningCorrection(double angle) {
+        return Range.clip(wrapAngle(getHeading() - angle) * TURNING_P_GAIN, -1, 1);
+    }
+
 
     /**
      * Waits until the motors are finished moving, or the driver presses stop.

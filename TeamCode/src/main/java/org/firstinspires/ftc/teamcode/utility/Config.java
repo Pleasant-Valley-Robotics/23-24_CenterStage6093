@@ -14,5 +14,6 @@ public class Config {
             RevHubOrientationOnRobot.UsbFacingDirection.UP
     );
 
-    public static final double TURNING_P_GAIN = 0.3;
+    public static final double TURNING_P_GAIN = 0.02;
+    public static final double STRAFING_P_GAIN = 0.07;
 }
