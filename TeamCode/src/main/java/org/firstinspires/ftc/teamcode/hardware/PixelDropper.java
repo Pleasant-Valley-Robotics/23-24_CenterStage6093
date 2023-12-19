@@ -15,9 +15,9 @@ public class PixelDropper {
 
     public @Api void dropPixel() {
         try {
-            servo.setPosition(1);
+            servo.setPosition(0.97);
             // wait 2s for servo to get there
-            Thread.sleep(1400);
+            Thread.sleep(2000);
             servo.setPosition(-1);
             Thread.sleep(1400);
         } catch (InterruptedException ignored) {

@@ -33,7 +33,7 @@ public class BlueCloseAuto extends LinearOpMode {
         camera.disableDetection();
 
         drivebase.driveForward(20.0, 0.3, telemetry);
-        drivebase.driveForward(6.0, 0.2, telemetry);
+        drivebase.driveForward(4.0, 0.2, telemetry);
 
 
         switch (side) {
@@ -60,7 +60,7 @@ public class BlueCloseAuto extends LinearOpMode {
 
         drivebase.absoluteTurn(90, 0.7, telemetry);
 
-        drivebase.driveSideways(4, 0.3, telemetry);
+        drivebase.driveSideways(4.5, 0.3, telemetry);
 
         drivebase.absoluteTurn(90, 0.7, telemetry);
 

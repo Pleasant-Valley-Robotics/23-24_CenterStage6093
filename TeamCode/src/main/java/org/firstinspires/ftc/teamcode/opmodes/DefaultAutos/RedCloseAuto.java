@@ -33,29 +33,24 @@ public class RedCloseAuto extends LinearOpMode {
         camera.disableDetection();
 
         drivebase.driveForward(20.0, 0.3, telemetry);
-        drivebase.driveForward(6.0, 0.2, telemetry);
+        drivebase.driveForward(4.0, 0.2, telemetry);
 
-
-        double pixelBumpDistance;
 
         switch (side) {
             case Right:
                 drivebase.relativeTurn(-65, 0.6, telemetry);
-                pixelBumpDistance = 6;
                 break;
             case Left:
                 drivebase.relativeTurn(65, 0.6, telemetry);
-                pixelBumpDistance = 5.75;
                 break;
             case Middle:
-                pixelBumpDistance = 6;
                 break;
             default:
                 return;
         }
 
-        drivebase.driveForward(pixelBumpDistance, 0.4, telemetry);
-        drivebase.driveForward(-pixelBumpDistance - 1, 0.4, telemetry);
+        drivebase.driveForward(6, 0.4, telemetry);
+        drivebase.driveForward(-6 - 1, 0.4, telemetry);
 
         drivebase.absoluteTurn(0, 0.5, telemetry);
         drivebase.driveForward(-12, 0.5, telemetry);
@@ -65,7 +60,7 @@ public class RedCloseAuto extends LinearOpMode {
 
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
-        drivebase.driveSideways(-20, 0.3, telemetry);
+        drivebase.driveSideways(-19, 0.3, telemetry);
 
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
@@ -74,18 +69,19 @@ public class RedCloseAuto extends LinearOpMode {
 
         switch (side) {
             case Left:
+
                 drivebase.driveSideways(-15, 0.3, telemetry);
-                drivebase.driveForward(7, 0.3, telemetry);
-                drivebase.driveForward(0.5, 0.2, telemetry);
+                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Middle:
                 drivebase.driveSideways(-7, 0.3, telemetry);
-                drivebase.driveForward(7, 0.3, telemetry);
-                drivebase.driveForward(1, 0.2, telemetry);
+                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Right:
                 drivebase.driveSideways(1, 0.3, telemetry);
-                drivebase.driveForward(7, 0.3, telemetry);
+                drivebase.driveForward(8, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
         }
