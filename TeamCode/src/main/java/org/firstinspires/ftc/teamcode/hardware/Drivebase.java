@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.hardware;
 import static org.firstinspires.ftc.teamcode.utility.Config.APRILTAGS;
 import static org.firstinspires.ftc.teamcode.utility.Config.ENCODER_PER_INCH;
 import static org.firstinspires.ftc.teamcode.utility.Config.HUB_FACING;
-import static org.firstinspires.ftc.teamcode.utility.Config.TURNING_P_GAIN;
 
 import androidx.annotation.Nullable;
 
@@ -12,11 +11,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.utility.Api;
+import org.firstinspires.ftc.teamcode.utility.Config.DRIVING;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.function.Supplier;
@@ -75,6 +76,16 @@ public class Drivebase {
     }
 
     /**
+     * Utility method to set all the motor modes and pidf coefficients at the same time.
+     */
+    private void setMotorModesPIDF(DcMotor.RunMode mode, PIDFCoefficients coefficients) {
+        fldrive.setPIDFCoefficients(mode, coefficients);
+        frdrive.setPIDFCoefficients(mode, coefficients);
+        bldrive.setPIDFCoefficients(mode, coefficients);
+        brdrive.setPIDFCoefficients(mode, coefficients);
+    }
+
+    /**
      * Utility method to set all the motor powers at the same time.
      */
     private void setMotorPowers(double power) {
@@ -111,10 +122,14 @@ public class Drivebase {
      * @param telemetry The telemetry board to add the data to.
      */
     public @Api void addTelemetry(Telemetry telemetry) {
-        telemetry.addData("FLDrive", fldrive.getCurrentPosition());
-        telemetry.addData("FRDrive", frdrive.getCurrentPosition());
-        telemetry.addData("BLDrive", bldrive.getCurrentPosition());
-        telemetry.addData("BRDrive", brdrive.getCurrentPosition());
+        telemetry.addData("FLDrive Position", fldrive.getCurrentPosition());
+        telemetry.addData("FRDrive Position", frdrive.getCurrentPosition());
+        telemetry.addData("BLDrive Position", bldrive.getCurrentPosition());
+        telemetry.addData("BRDrive Position", brdrive.getCurrentPosition());
+        telemetry.addData("FLDrive Velocity", fldrive.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("FRDrive Velocity", frdrive.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("BLDrive Velocity", bldrive.getVelocity(AngleUnit.DEGREES));
+        telemetry.addData("BRDrive Velocity", brdrive.getVelocity(AngleUnit.DEGREES));
         telemetry.addData("Heading", getHeading());
         telemetry.update();
     }
@@ -207,7 +222,7 @@ public class Drivebase {
         double target = inches * ENCODER_PER_INCH;
         setMotorTargets((int) target, (int) target, (int) target, (int) target);
 
-        setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
+        setMotorModesPIDF(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(DRIVING.DRIVING_P_GAIN, 0, 0, 0));
         setMotorPowers(power);
         waitForMotors(telemetry);
 
@@ -306,7 +321,7 @@ public class Drivebase {
     }
 
     private double getTurningCorrection(double angle) {
-        return Range.clip(wrapAngle(getHeading() - angle) * TURNING_P_GAIN, -1, 1);
+        return Range.clip(wrapAngle(getHeading() - angle) * DRIVING.TURNING_P_GAIN, -1, 1);
     }
 
 

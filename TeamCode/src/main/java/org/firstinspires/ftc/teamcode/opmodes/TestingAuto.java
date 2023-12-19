@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 @Autonomous(name = "TestingAuto")
 public class TestingAuto extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         telemetry.setAutoClear(true);
 
         telemetry.addData("Status", "Initializing");
@@ -24,31 +24,7 @@ public class TestingAuto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        camera.enableAprilTags();
-
-        sleep(300);
-
-        for (int i = 0; i < 19; i++) {
-            sleep(100);
-            AprilTagDetection detection = camera.getTagById(3).get();
-            if (detection == null) {
-                telemetry.addData("x", "");
-                telemetry.addData("y", "");
-            } else {
-                telemetry.addData("x", detection.ftcPose.x);
-                telemetry.addData("y", detection.ftcPose.y);
-            }
-            telemetry.update();
-        }
-
-        telemetry.update();
-
-        drivebase.centerToAprilTag(10, camera.getTagById(3));
-
-
-        telemetry.addData("Status", "Running");
-        telemetry.update();
-
+        drivebase.driveForward(24.0, 0.5, telemetry);
 
         telemetry.clearAll();
         telemetry.addData("Status", "Finished");
