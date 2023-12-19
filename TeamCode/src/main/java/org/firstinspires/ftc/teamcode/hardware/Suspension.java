@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.utility.Api;
@@ -12,6 +13,9 @@ public class Suspension {
     public Suspension(HardwareMap hardwareMap) {
         leftScrew = hardwareMap.get(DcMotor.class, "Left Screw");
         rightScrew = hardwareMap.get(DcMotor.class, "Right Screw");
+
+        leftScrew.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightScrew.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     /**
