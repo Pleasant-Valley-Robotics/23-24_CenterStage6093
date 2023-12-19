@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 import org.firstinspires.ftc.teamcode.hardware.DroneLauncher;
 import org.firstinspires.ftc.teamcode.hardware.PixelDropper;
+import org.firstinspires.ftc.teamcode.hardware.Suspension;
 
 @TeleOp(name = "TestingTeleOp")
 public class TestingTeleOp extends LinearOpMode {
@@ -20,9 +21,8 @@ public class TestingTeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
-        Drivebase drivebase = new Drivebase(hardwareMap, null);
-        PixelDropper dropper = new PixelDropper(hardwareMap);
-        DroneLauncher launcher = new DroneLauncher(hardwareMap, null);
+        Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
+        DroneLauncher launcher = new DroneLauncher(hardwareMap, telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -32,9 +32,9 @@ public class TestingTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if (gamepad1.triangle) dropper.dropPixel();
             if (gamepad1.right_bumper) launcher.LaunchDathOe();
-            // FTC controllers have inverted joystick y values
+            else launcher.UnLaunchDathOe();
+
 
             double yInput = -gamepad1.left_stick_y;
             double xInput = gamepad1.left_stick_x;
