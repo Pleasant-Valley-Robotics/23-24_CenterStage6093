@@ -60,7 +60,7 @@ public class RedCloseAuto extends LinearOpMode {
 
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
-        drivebase.driveSideways(-20, 0.3, telemetry);
+        drivebase.driveSideways(-19, 0.3, telemetry);
 
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
@@ -69,19 +69,20 @@ public class RedCloseAuto extends LinearOpMode {
 
         switch (side) {
             case Left:
+
                 drivebase.driveSideways(-15, 0.3, telemetry);
-                drivebase.driveForward(9, 0.3, telemetry);
-                drivebase.driveForward(1, 0.2, telemetry);
+                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Middle:
                 drivebase.driveSideways(-7, 0.3, telemetry);
-                drivebase.driveForward(9, 0.3, telemetry);
-                drivebase.driveForward(1, 0.2, telemetry);
+                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Right:
                 drivebase.driveSideways(1, 0.3, telemetry);
-                drivebase.driveForward(9, 0.3, telemetry);
-                drivebase.driveForward(1, 0.2, telemetry);
+                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveForward(2, 0.2, telemetry);
                 break;
         }
 

@@ -22,7 +22,7 @@ public class TestingTeleOp extends LinearOpMode {
         telemetry.update();
 
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
-        DroneLauncher launcher = new DroneLauncher(hardwareMap, null);
+        DroneLauncher launcher = new DroneLauncher(hardwareMap, telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -33,6 +33,8 @@ public class TestingTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.right_bumper) launcher.LaunchDathOe();
+            else launcher.UnLaunchDathOe();
+
 
             drivebase.mecanumDrive(gamepad1);
             drivebase.addTelemetry(telemetry);
