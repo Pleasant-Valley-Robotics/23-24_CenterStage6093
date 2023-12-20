@@ -6,7 +6,7 @@ public class Config {
     // Encoder/Inch = 360/Ticks per motor shaft revolution
     public static final double TICKS_PER_REVOLUTION = 3007.2; //Encoder pulses per rev by supplier information
     public static final double GEARBOX_REDUCTION = 1; //Gearbox on motor * gearbox on robot 26.9:1, this is already included in
-    //ticks per revoloution, given by goBuildA.
+    //ticks per revolution, given by goBILDA.
     public static final double WHEEL_DIAMETER_INCHES = 5.512; //Wheel diameter in inches
     public static final double ENCODER_PER_INCH = (TICKS_PER_REVOLUTION * GEARBOX_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
