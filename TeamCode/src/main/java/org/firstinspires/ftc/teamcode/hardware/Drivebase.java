@@ -222,7 +222,7 @@ public class Drivebase {
         double target = inches * ENCODER_PER_INCH;
         setMotorTargets((int) target, (int) target, (int) target, (int) target);
 
-        setMotorModesPIDF(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(DRIVING.DRIVING_P_GAIN, 0, 0, 0));
+        setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         setMotorPowers(power);
         waitForMotors(telemetry);
 

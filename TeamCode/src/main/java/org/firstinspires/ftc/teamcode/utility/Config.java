@@ -16,7 +16,7 @@ public class Config {
 
     public static class DRIVING {
         public static final double TURNING_P_GAIN = 0.02;
-        public static final double DRIVING_P_GAIN = 0.02;
+        public static final double DRIVING_P_GAIN = 2;
     }
 
 
