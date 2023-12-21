@@ -29,24 +29,34 @@ public class BlueFarAuto extends LinearOpMode {
         CubeSide side = camera.getStableCubePrediction(15);
         telemetry.addData("Side", side);
         telemetry.update();
-        drivebase.driveForward(20.0, 0.3, null);
         telemetry.update();
+
+        drivebase.driveForward(24, 0.3, telemetry);
+
+        if(side == CubeSide.Left) {
+            drivebase.relativeTurn(65, 0.4, telemetry);
+            drivebase.driveForward(6.0, 0.3, telemetry);
+            drivebase.driveForward(-6.0, 0.3, telemetry);
+            drivebase.absoluteTurn(0, 0.4, telemetry);
+        }
+
         switch (side) {
             case Right:
                 //was 65 before
-                drivebase.relativeTurn(-65, 0.6, null);
+
                 break;
             case Left:
-                //was -65 before.
-                drivebase.relativeTurn(65, 0.6, null);
+                drivebase.driveForward(13, 0.3, telemetry);
+                drivebase.absoluteTurn(180, 0.3, telemetry);
                 break;
             case Middle:
+                drivebase.driveForward(29, 0.4, telemetry);
+                drivebase.absoluteTurn(180, 0.2, telemetry);
+                drivebase.driveForward(5,0.4, telemetry);
+                drivebase.driveForward(-5, 0.4, telemetry);
                 break;
         }
         // Score Pixel
         telemetry.update();
-        drivebase.driveForward(5.0, 0.4, null);
-        drivebase.driveForward(-5.0, 0.4, null);
-
     }
 }
