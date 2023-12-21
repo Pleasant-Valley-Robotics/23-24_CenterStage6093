@@ -19,7 +19,6 @@ public class BlueCloseAuto extends LinearOpMode {
         PixelDropper pixelDropper = new PixelDropper(hardwareMap);
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.BlueClose);
-
         // we enable and disable pipelines in order to save on processing power.
         camera.enableCubePipeline();
 
@@ -49,46 +48,36 @@ public class BlueCloseAuto extends LinearOpMode {
                 return;
         }
 
+
         drivebase.driveForward(6, 0.4, telemetry);
-        drivebase.driveForward(-6 - 1, 0.4, telemetry);
+        drivebase.driveForward(-6, 0.4, telemetry);
+        //Pixel HAS BEEN PLACED!!!
 
-        drivebase.absoluteTurn(0, 0.5, telemetry);
-        drivebase.driveForward(-12, 0.5, telemetry);
+        drivebase.absoluteTurn(0,0.4,telemetry);
+        drivebase.driveForward(-12, 0.4, telemetry);
         drivebase.relativeTurn(90, 0.5, telemetry);
+        drivebase.driveForward(24, 0.4, telemetry);
+        drivebase.relativeTurn(-90, 0.4, telemetry);
+        drivebase.driveForward(56, 0.4, telemetry);
+        //Gotten Through truss
 
-        drivebase.driveForward(30, 0.4, telemetry);
-
-        drivebase.absoluteTurn(90, 0.7, telemetry);
-
-        drivebase.driveSideways(4.5, 0.3, telemetry);
-
-        drivebase.absoluteTurn(90, 0.7, telemetry);
-
-
-//        camera.enableAprilTags();
-
+        drivebase.driveSideways(38, 0.4, telemetry);
+        // Infront of DropBase
+        camera.enableAprilTags();
         switch (side) {
             case Right:
-                drivebase.driveSideways(15, 0.3, telemetry);
-                drivebase.driveForward(9, 0.3, telemetry);
-                drivebase.driveForward(2, 0.2, telemetry);
+                drivebase.driveSideways(2, 0.4, telemetry);
                 break;
             case Middle:
-                drivebase.driveSideways(7, 0.3, telemetry);
-                drivebase.driveForward(9, 0.3, telemetry);
-                drivebase.driveForward(2, 0.2, telemetry);
+
                 break;
             case Left:
-                drivebase.driveSideways(-1, 0.3, telemetry);
-                drivebase.driveForward(9, 0.3, telemetry);
-                drivebase.driveForward(2, 0.2, telemetry);
+
                 break;
+            default:
+                return;
         }
 
-        pixelDropper.dropPixel();
-        drivebase.driveForward(-2.5, 0.5, null);
-
-        telemetry.addData("Status", "Finished");
 
     }
 }
