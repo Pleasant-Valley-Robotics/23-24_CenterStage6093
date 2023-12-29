@@ -23,6 +23,7 @@ public class TestingTeleOp extends LinearOpMode {
 
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         DroneLauncher launcher = new DroneLauncher(hardwareMap, telemetry);
+        Suspension suspension = new Suspension(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -45,6 +46,8 @@ public class TestingTeleOp extends LinearOpMode {
 
             telemetry.addData("Status", "Running");
             telemetry.update();
+
+            suspension.spoolDaSpool(gamepad2, telemetry);
         }
 
         telemetry.clearAll();
