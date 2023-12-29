@@ -32,7 +32,7 @@ public class Suspension {
 
     public @Api void spoolDaSpool(Gamepad gamepad, @Nullable Telemetry telemetry) {
         spoolMotor.setPower(gamepad.left_stick_y);
-        armMotor.setPower(gamepad.right_stick_y);
+        armMotor.setPower(gamepad.right_stick_y * 0.5);
 
         telemetry.addData("Spool Position", spoolMotor.getCurrentPosition());
         telemetry.addData("Arm Position", armMotor.getCurrentPosition());
