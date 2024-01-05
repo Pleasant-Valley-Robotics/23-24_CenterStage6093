@@ -82,6 +82,9 @@ public class VisionCamera {
     public @Api void addTelemetry(Telemetry telemetry) {
         telemetry.addData("Fps", portal.getFps());
         telemetry.addData("Cube Side", pipeline.getCubeSide());
+        if (apriltags.getDetections().size() == 0) return;
+        telemetry.addData("Tag X", apriltags.getDetections().get(0).ftcPose.x);
+        telemetry.addData("Tag Y", apriltags.getDetections().get(0).ftcPose.y);
     }
 
     /**
