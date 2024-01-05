@@ -180,7 +180,7 @@ public class Drivebase {
      * @param getDetection Source of detections to center to.
      * @see VisionCamera#getTagById
      */
-    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) {
+    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection, Telemetry telemetry) {
         double yPropErrorInches = 0;
         double xPropErrorInches = 0;
         double yawPropErrorDegrees;
@@ -189,6 +189,8 @@ public class Drivebase {
         double xDerErrorInchPerSec;
 
         AprilTagDetection latestDetection;
+
+        setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
         do {
             do {
@@ -200,14 +202,30 @@ public class Drivebase {
                 double xPower = xPropErrorInches * APRILTAGS.X_P_GAIN + xDerErrorInchPerSec * APRILTAGS.X_D_GAIN;
                 double yawPower = yawPropErrorDegrees * APRILTAGS.YAW_P_GAIN;
 
+
+                addTelemetry(telemetry);
+
                 mecanumDrive(yPower, xPower, yawPower);
             } while ((latestDetection = getDetection.get()) == null);
 
+            telemetry.addData("Latest", latestDetection.ftcPose.toString());
+
             yPropErrorInches = latestDetection.ftcPose.y - distance;
-            xPropErrorInches = latestDetection.ftcPose.x;
-        } while (Math.abs(yawPropErrorDegrees) > 2 || Math.abs(xPropErrorInches) > 0.1 || Math.abs(yPropErrorInches) > 0.1);
+            xPropErrorInches = latestDetection.ftcPose.x - 0.4;
+        } while (Math.abs(yawPropErrorDegrees) > 2 || Math.abs(xPropErrorInches) > 0.5 || Math.abs(yPropErrorInches) > 0.1);
 
         setMotorPowers(0);
+    }
+
+    /**
+     * For use in auto. Centers the robot to an AprilTag, at a specified distance.
+     *
+     * @param distance     How far away from the tag you want to be, in inches.
+     * @param getDetection Source of detections to center to.
+     * @see VisionCamera#getTagById
+     */
+    public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) {
+        centerToAprilTag(distance, getDetection, null);
     }
 
     /**
