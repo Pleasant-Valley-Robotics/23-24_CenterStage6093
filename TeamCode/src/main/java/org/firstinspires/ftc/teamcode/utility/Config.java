@@ -21,10 +21,10 @@ public class Config {
 
 
     public static class APRILTAGS {
-        public static final double X_P_GAIN = 0.03;
-        public static final double X_D_GAIN = -0.03;
-        public static final double Y_P_GAIN = 0.03;
-        public static final double Y_D_GAIN = -0.03;
+        public static final double X_P_GAIN = 0.1;
+        public static final double X_D_GAIN = -0.02;
+        public static final double Y_P_GAIN = 0.06;
+        public static final double Y_D_GAIN = -0.015;
         public static final double YAW_P_GAIN = 0.03;
     }
 }
