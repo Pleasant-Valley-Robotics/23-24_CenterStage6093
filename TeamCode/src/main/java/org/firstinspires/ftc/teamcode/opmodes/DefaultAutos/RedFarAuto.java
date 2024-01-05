@@ -11,66 +11,90 @@ import org.firstinspires.ftc.teamcode.utility.FieldSide;
 
 @Autonomous(name = "RedFarAuto")
 public class RedFarAuto extends LinearOpMode {
+
     public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initializing");
         telemetry.update();
+
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         PixelDropper dropper = new PixelDropper(hardwareMap);
         VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.RedFar);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        waitForStart();
-        CubeSide side = camera.getStableCubePrediction(15);
+        camera.enableCubePipeline();
 
-        drivebase.driveForward(6.0, 0.2, null);
-        drivebase.driveForward(20.0, 0.3, null);
+        waitForStart();
+
+        CubeSide side = camera.getStableCubePrediction(15);
+        telemetry.addData("Side", side);
+        telemetry.update();
+        telemetry.update();
+
+        drivebase.driveForward(24, 0.3, telemetry);
+        camera.disableDetection();
+
+        if(side == CubeSide.Left) {
+            drivebase.relativeTurn(65, 0.4, telemetry);
+            drivebase.driveForward(7.0, 0.3, telemetry);
+            drivebase.driveForward(-7.0, 0.3, telemetry);
+            drivebase.absoluteTurn(0, 0.4, telemetry);
+        }
+
         switch (side) {
             case Right:
-                drivebase.relativeTurn(-65, 0.6, null);
+                drivebase.driveForward(20, 0.4, telemetry);
+                drivebase.driveForward(3, 0.2, telemetry);
+                //Was -140.
+                drivebase.absoluteTurn(140, 0.2, telemetry);
+                drivebase.driveForward(11,0.4, telemetry);
+                drivebase.driveForward(-14, 0.4, telemetry);
+                //Was -40.
+                drivebase.relativeTurn(40, 0.4, telemetry);
                 break;
             case Left:
-                drivebase.relativeTurn(65, 0.6, null);
+                drivebase.driveForward(26, 0.3, telemetry);
+                drivebase.absoluteTurn(180, 0.3, telemetry);
                 break;
             case Middle:
+                drivebase.driveForward(20, 0.25, telemetry);
+                drivebase.driveForward(4, 0.3, telemetry);
+                //Was 180.
+                drivebase.absoluteTurn(-180, 0.2, telemetry);
+                drivebase.driveForward(4,0.4, telemetry);
+                drivebase.driveForward(-8, 0.4, telemetry);
                 break;
         }
         // Score Pixel
-        drivebase.driveForward(5.0, 0.4, null);
-        drivebase.driveForward(-5.0, 0.4, null);
+        telemetry.update();
 
-        // Get Out of Spike Mark Area
-        drivebase.absoluteTurn(0, 0.5, null);
-        drivebase.driveForward(-18, 0.4, null);
-        drivebase.absoluteTurn(-90, 0.5, null);
-        drivebase.driveForward(20, 0.5, null);
-
-        // Go Around Spike Mark Area
-        drivebase.relativeTurn(90, 0.5, null);
-        drivebase.driveForward(50, 0.5, null);
-        drivebase.absoluteTurn(90, 0.5, null);
-
-        //Go through Truss and Get to Backdrop
-        drivebase.driveForward(92, 0.4, null);
-        drivebase.driveSideways(72, 0.5, null);
-
+        drivebase.absoluteTurn(-90, 0.4, telemetry);
+        drivebase.driveForward(80, 0.5, telemetry);
+        drivebase.driveSideways(36, 0.3, telemetry);
 
         switch(side) {
-            case Right:
-                    drivebase.driveSideways(2,0.5,null);
-                    drivebase.centerToAprilTag(10, camera.getTagById(1));
-
-                break;
             case Left:
-
-                drivebase.centerToAprilTag(10, camera.getTagById(1));
+                //Offset
+                drivebase.driveSideways(-8, 0.3, telemetry);
+                //Center To Apriltag
+                break;
+            case Right:
+                //Offset
+                drivebase.driveSideways(5, 0.3, telemetry);
+                //Center to Apriltag
                 break;
             case Middle:
-                drivebase.centerToAprilTag(10, camera.getTagById(1));
+                //Was -5.
+                drivebase.driveSideways(-24, 0.3, telemetry);
+
+                //Center to Apriltag
+                drivebase.centerToAprilTag(2.0, camera.getTagById(2));
                 break;
         }
 
-        drivebase.driveForward(5, 0.5, null);
+        drivebase.driveForward(7, 0.3, telemetry);
+
         dropper.dropPixel();
-        drivebase.driveForward(-3,0.4, null);
+        drivebase.driveForward(-2, 0.5, telemetry);
     }
 }
