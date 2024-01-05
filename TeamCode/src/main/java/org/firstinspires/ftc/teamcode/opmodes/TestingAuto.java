@@ -20,11 +20,14 @@ public class TestingAuto extends LinearOpMode {
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.BlueClose);
 
+        camera.enableAprilTags();
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
-        drivebase.driveForward(24.0, 0.5, telemetry);
+
+        drivebase.centerToAprilTag(14.0, camera.getTagById(2));
 
         telemetry.clearAll();
         telemetry.addData("Status", "Finished");
