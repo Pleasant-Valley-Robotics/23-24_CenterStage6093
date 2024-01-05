@@ -191,7 +191,7 @@ public class Drivebase {
 
         do {
             do {
-                yawPropErrorDegrees = 90 - getHeading();
+                yawPropErrorDegrees = getHeading();
                 yDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
                 xDerErrorInchPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / (2 * ENCODER_PER_INCH);
 
@@ -202,9 +202,12 @@ public class Drivebase {
                 mecanumDrive(yPower, xPower, yawPower);
             } while ((latestDetection = getDetection.get()) == null);
 
-            yPropErrorInches = distance - latestDetection.ftcPose.y;
-            xPropErrorInches = -latestDetection.ftcPose.x;
-        } while (yawPropErrorDegrees > 2 && xPropErrorInches > 0.1 && yPropErrorInches > 0.1);
+            yPropErrorInches = latestDetection.ftcPose.y - distance;
+            xPropErrorInches = latestDetection.ftcPose.x;
+//        } while (Math.abs(yawPropErrorDegrees) > 0.5);
+        } while (Math.abs(xPropErrorInches) > 0.1 || Math.abs(yPropErrorInches) > 0.1);
+
+        setMotorPowers(0);
     }
 
     /**
