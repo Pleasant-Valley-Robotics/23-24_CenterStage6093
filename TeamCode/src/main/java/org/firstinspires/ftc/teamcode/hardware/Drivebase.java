@@ -174,10 +174,11 @@ public class Drivebase {
     }
 
     /**
-     * For use in auto. Centers the robot to an apriltag, at a specified distance.
+     * For use in auto. Centers the robot to an AprilTag, at a specified distance.
      *
      * @param distance     How far away from the tag you want to be, in inches.
      * @param getDetection Source of detections to center to.
+     * @see VisionCamera#getTagById
      */
     public @Api void centerToAprilTag(double distance, Supplier<AprilTagDetection> getDetection) {
         double yPropErrorInches = 0;
@@ -191,7 +192,7 @@ public class Drivebase {
 
         do {
             do {
-                yawPropErrorDegrees = getHeading();
+                yawPropErrorDegrees = wrapAngle(getHeading() - imuSetpoint);
                 yDerErrorInchPerSec = (fldrive.getVelocity() + frdrive.getVelocity()) / (2 * ENCODER_PER_INCH);
                 xDerErrorInchPerSec = (fldrive.getVelocity() - bldrive.getVelocity()) / (2 * ENCODER_PER_INCH);
 
