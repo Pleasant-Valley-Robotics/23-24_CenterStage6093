@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 
+import android.media.SoundPool;
+
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
+import org.firstinspires.ftc.robotcore.internal.android.SoundPoolIntf;
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 import org.firstinspires.ftc.teamcode.hardware.DroneLauncher;
 import org.firstinspires.ftc.teamcode.hardware.PixelDropper;
@@ -24,6 +29,9 @@ public class TestingTeleOp extends LinearOpMode {
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         DroneLauncher launcher = new DroneLauncher(hardwareMap, telemetry);
         Suspension suspension = new Suspension(hardwareMap);
+        AndroidSoundPool soundPool = new AndroidSoundPool();
+        soundPool.initialize(SoundPlayer.getInstance());
+        soundPool.setVolume(1f);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -32,10 +40,11 @@ public class TestingTeleOp extends LinearOpMode {
 
         waitForStart();
 
+        soundPool.play("Carefree(chosic.com).mp3");
+
         while (opModeIsActive()) {
             if (gamepad1.right_bumper) launcher.LaunchDathOe();
             else launcher.UnLaunchDathOe();
-
 
             double yInput = -gamepad1.left_stick_y;
             double xInput = gamepad1.left_stick_x;
