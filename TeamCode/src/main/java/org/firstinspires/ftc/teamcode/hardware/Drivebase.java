@@ -204,8 +204,7 @@ public class Drivebase {
 
             yPropErrorInches = latestDetection.ftcPose.y - distance;
             xPropErrorInches = latestDetection.ftcPose.x;
-//        } while (Math.abs(yawPropErrorDegrees) > 0.5);
-        } while (Math.abs(xPropErrorInches) > 0.1 || Math.abs(yPropErrorInches) > 0.1);
+        } while (Math.abs(yawPropErrorDegrees) > 2 || Math.abs(xPropErrorInches) > 0.1 || Math.abs(yPropErrorInches) > 0.1);
 
         setMotorPowers(0);
     }
