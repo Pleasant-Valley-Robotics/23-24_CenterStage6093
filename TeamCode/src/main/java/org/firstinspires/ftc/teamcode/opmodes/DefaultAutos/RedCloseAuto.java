@@ -19,7 +19,6 @@ public class RedCloseAuto extends LinearOpMode {
         PixelDropper pixelDropper = new PixelDropper(hardwareMap);
         Drivebase drivebase = new Drivebase(hardwareMap, this::opModeIsActive);
         VisionCamera camera = new VisionCamera(hardwareMap, FieldSide.RedClose);
-
         // we enable and disable pipelines in order to save on processing power.
         camera.enableCubePipeline();
 
@@ -32,9 +31,7 @@ public class RedCloseAuto extends LinearOpMode {
 
         camera.disableDetection();
 
-        drivebase.driveForward(20.0, 0.3, telemetry);
-        drivebase.driveForward(4.0, 0.2, telemetry);
-
+        drivebase.driveForward(24.0, 0.3, telemetry);
 
         switch (side) {
             case Right:
@@ -50,7 +47,7 @@ public class RedCloseAuto extends LinearOpMode {
         }
 
         drivebase.driveForward(6, 0.4, telemetry);
-        drivebase.driveForward(-6 - 1, 0.4, telemetry);
+        drivebase.driveForward(-7, 0.4, telemetry);
 
         drivebase.absoluteTurn(0, 0.5, telemetry);
         drivebase.driveForward(-12, 0.5, telemetry);
@@ -65,23 +62,25 @@ public class RedCloseAuto extends LinearOpMode {
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
 
-//        camera.enableAprilTags();
+        camera.enableAprilTags();
 
         switch (side) {
             case Left:
-
-                drivebase.driveSideways(-15, 0.3, telemetry);
-                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveSideways(-10, 0.3, telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(1), telemetry);
+                drivebase.driveSideways(-7, 0.3, telemetry);
+                drivebase.driveForward(6, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Middle:
-                drivebase.driveSideways(-7, 0.3, telemetry);
-                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.driveSideways(-10, 0.3, telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(1), telemetry);
+                drivebase.driveForward(6, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Right:
-                drivebase.driveSideways(1, 0.3, telemetry);
-                drivebase.driveForward(8, 0.3, telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(2), telemetry);
+                drivebase.driveForward(6, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
         }
