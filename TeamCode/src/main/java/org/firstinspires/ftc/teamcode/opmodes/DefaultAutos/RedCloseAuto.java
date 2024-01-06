@@ -59,9 +59,7 @@ public class RedCloseAuto extends LinearOpMode {
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
         drivebase.driveSideways(-19, 0.3, telemetry);
-
         drivebase.absoluteTurn(-90, 0.7, telemetry);
-
 
         camera.enableAprilTags();
 

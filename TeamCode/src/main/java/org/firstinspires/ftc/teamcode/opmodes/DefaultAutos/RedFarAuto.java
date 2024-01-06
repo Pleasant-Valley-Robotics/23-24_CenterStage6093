@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.VisionCamera;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
 
-@Autonomous(name = "RedFarAuto")
+@Autonomous(name = "RedFar")
 public class RedFarAuto extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
