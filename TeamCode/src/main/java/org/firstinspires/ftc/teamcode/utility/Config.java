@@ -30,8 +30,8 @@ public class Config {
         public static final int ID_BLUE_LEFT = 1;
         public static final int ID_BLUE_MIDDLE = 2;
         public static final int ID_BLUE_RIGHT = 3;
-        public static final int ID_RED_LEFT = 6;
+        public static final int ID_RED_LEFT = 4;
         public static final int ID_RED_MIDDLE = 5;
-        public static final int ID_RED_RIGHT = 4;
+        public static final int ID_RED_RIGHT = 6;
     }
 }
