@@ -26,5 +26,12 @@ public class Config {
         public static final double Y_P_GAIN = 0.06;
         public static final double Y_D_GAIN = -0.015;
         public static final double YAW_P_GAIN = 0.03;
+
+        public static final int ID_BLUE_LEFT = 1;
+        public static final int ID_BLUE_MIDDLE = 2;
+        public static final int ID_BLUE_RIGHT = 3;
+        public static final int ID_RED_LEFT = 6;
+        public static final int ID_RED_MIDDLE = 5;
+        public static final int ID_RED_RIGHT = 4;
     }
 }

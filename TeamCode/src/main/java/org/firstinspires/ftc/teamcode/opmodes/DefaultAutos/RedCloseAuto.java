@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardware.Drivebase;
 import org.firstinspires.ftc.teamcode.hardware.PixelDropper;
 import org.firstinspires.ftc.teamcode.hardware.VisionCamera;
+import org.firstinspires.ftc.teamcode.utility.Config;
 import org.firstinspires.ftc.teamcode.utility.CubeSide;
 import org.firstinspires.ftc.teamcode.utility.FieldSide;
 
@@ -67,19 +68,19 @@ public class RedCloseAuto extends LinearOpMode {
         switch (side) {
             case Left:
                 drivebase.driveSideways(-10, 0.3, telemetry);
-                drivebase.centerToAprilTag(15, camera.getTagById(1), telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_RED_LEFT), telemetry);
                 drivebase.driveSideways(-7, 0.3, telemetry);
                 drivebase.driveForward(6, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Middle:
                 drivebase.driveSideways(-10, 0.3, telemetry);
-                drivebase.centerToAprilTag(15, camera.getTagById(1), telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_RED_LEFT), telemetry);
                 drivebase.driveForward(6, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Right:
-                drivebase.centerToAprilTag(15, camera.getTagById(2), telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_RED_MIDDLE), telemetry);
                 drivebase.driveForward(6, 0.3, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
                 break;
