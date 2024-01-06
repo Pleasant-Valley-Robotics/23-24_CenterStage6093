@@ -34,11 +34,12 @@ public class Suspension {
         spoolMotor.setPower(gamepad.left_stick_y);
         armMotor.setPower(gamepad.right_stick_y * 0.5);
 
+        if (telemetry == null) return;
+
         telemetry.addData("Spool Position", spoolMotor.getCurrentPosition());
         telemetry.addData("Arm Position", armMotor.getCurrentPosition());
         telemetry.addData("Spool Speed", spoolMotor.getPower());
         telemetry.addData("Arm Speed", armMotor.getPower());
-        telemetry.update();
     }
 
 
