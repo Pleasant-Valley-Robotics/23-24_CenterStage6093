@@ -40,11 +40,17 @@ public class TestingTeleOp extends LinearOpMode {
 
         waitForStart();
 
-        soundPool.play("Carefree(chosic.com).mp3");
+//        soundPool.play("Carefree(chosic.com).mp3");
 
         while (opModeIsActive()) {
             if (gamepad1.right_bumper) launcher.LaunchDathOe();
             else launcher.UnLaunchDathOe();
+//
+//            double droneInput = gamepad1.right_trigger;
+//
+//            launcher.daPewpew.setPosition(droneInput);
+//
+//            telemetry.addData("Launch Position", droneInput);
 
             double yInput = -gamepad1.left_stick_y;
             double xInput = gamepad1.left_stick_x;
@@ -54,9 +60,9 @@ public class TestingTeleOp extends LinearOpMode {
             drivebase.addTelemetry(telemetry);
 
             telemetry.addData("Status", "Running");
-            telemetry.update();
 
             suspension.spoolDaSpool(gamepad2, telemetry);
+            telemetry.update();
         }
 
         telemetry.clearAll();

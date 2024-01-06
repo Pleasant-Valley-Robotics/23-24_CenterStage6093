@@ -23,11 +23,11 @@ public class DroneLauncher {
     }
 
     public @Api void LaunchDathOe() {
-        daPewpew.setPosition(0.38);
+        daPewpew.setPosition(1.0);
     }
 
     public @Api void UnLaunchDathOe() {
-        daPewpew.setPosition(0);
+        daPewpew.setPosition(0.8);
     }
 
 
