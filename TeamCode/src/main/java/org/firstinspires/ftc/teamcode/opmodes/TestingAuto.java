@@ -27,7 +27,7 @@ public class TestingAuto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        drivebase.centerToAprilTag(14.0, camera.getTagById(1), telemetry);
+        drivebase.centerToAprilTag(14.0, camera.getTagById(1));
 
         telemetry.clearAll();
         telemetry.addData("Status", "Finished");
