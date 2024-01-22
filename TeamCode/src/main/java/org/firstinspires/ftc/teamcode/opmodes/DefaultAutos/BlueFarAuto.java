@@ -44,12 +44,11 @@ public class BlueFarAuto extends LinearOpMode {
 
         switch (side) {
             case Right:
-                //Code that we now works though it's not the most practical.
+                //Code that we know works though it's not the most practical.
 //                drivebase.driveForward(20, 0.4, telemetry);
 //                drivebase.driveForward(3, 0.2, telemetry);
 //                drivebase.absoluteTurn(-140, 0.2, telemetry);
 //                drivebase.driveForward(11, 0.4, telemetry);
-//                //Was -14.
 //                drivebase.driveForward(-16, 0.4, telemetry);
 //                drivebase.relativeTurn(-40, 0.4, telemetry);
 
@@ -57,7 +56,8 @@ public class BlueFarAuto extends LinearOpMode {
                 drivebase.relativeTurn(-65, 0.4, telemetry);
                 drivebase.driveForward(7.0, 0.3, telemetry);
                 drivebase.driveForward(-7.0, 0.3, telemetry);
-                //drivebase.absoluteTurn(0, 0.4, telemetry);
+                drivebase.absoluteTurn(0, 0.4, telemetry);
+                drivebase.driveForward(26, 0.3, telemetry);
                 break;
             case Left:
                 drivebase.driveForward(26, 0.3, telemetry);
@@ -83,7 +83,6 @@ public class BlueFarAuto extends LinearOpMode {
         switch (side) {
             case Left:
                 //Offset
-                //Was -5.
                 drivebase.centerToAprilTag(14.0, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
                 drivebase.driveSideways(-7, 0.3, telemetry);
                 //centerToApriltag.
@@ -101,7 +100,6 @@ public class BlueFarAuto extends LinearOpMode {
                 break;
         }
 
-        //Was 7.
         drivebase.driveForward(8, 0.3, telemetry);
 
         dropper.dropPixel();
