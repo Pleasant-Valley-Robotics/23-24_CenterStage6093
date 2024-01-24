@@ -203,7 +203,7 @@ public class Drivebase {
                 double yawPower = yawPropErrorDegrees * APRILTAGS.YAW_P_GAIN;
 
 
-                mecanumDrive(yPower, xPower, yawPower);
+                mecanumDrive(Range.clip(yPower, -0.3, 0.3), Range.clip(xPower, -0.15, 0.15), yawPower);
             } while ((latestDetection = getDetection.get()) == null);
 
             yPropErrorInches = latestDetection.ftcPose.y - distance;
