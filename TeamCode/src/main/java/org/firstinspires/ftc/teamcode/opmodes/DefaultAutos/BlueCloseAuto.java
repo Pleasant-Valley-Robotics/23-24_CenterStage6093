@@ -66,21 +66,18 @@ public class BlueCloseAuto extends LinearOpMode {
             case Left:
                 drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
                 drivebase.driveSideways(-7, 0.3, telemetry);
-                drivebase.driveForward(6, 0.3, telemetry);
-                drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Middle:
                 drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
-                drivebase.driveForward(6, 0.3, telemetry);
-                drivebase.driveForward(2, 0.2, telemetry);
                 break;
             case Right:
                 drivebase.driveSideways(7, 0.3, telemetry);
                 drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_BLUE_MIDDLE));
-                drivebase.driveForward(6, 0.3, telemetry);
-                drivebase.driveForward(2, 0.2, telemetry);
                 break;
         }
+
+        drivebase.driveForward(6, 0.3, telemetry);
+        drivebase.driveForward(2, 0.2, telemetry);
 
         pixelDropper.dropPixel();
         drivebase.driveForward(-2.5, 0.5, null);

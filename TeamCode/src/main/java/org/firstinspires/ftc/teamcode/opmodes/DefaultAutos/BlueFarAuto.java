@@ -32,15 +32,10 @@ public class BlueFarAuto extends LinearOpMode {
         telemetry.update();
         telemetry.update();
 
-        drivebase.driveForward(24, 0.3, telemetry);
+        drivebase.driveForward(22, 0.7, telemetry);
+        drivebase.driveForward(2, 0.2, telemetry);
         camera.disableDetection();
 
-        if (side == CubeSide.Left) {
-            drivebase.relativeTurn(65, 0.4, telemetry);
-            drivebase.driveForward(7.0, 0.3, telemetry);
-            drivebase.driveForward(-7.0, 0.3, telemetry);
-            drivebase.absoluteTurn(0, 0.4, telemetry);
-        }
 
         switch (side) {
             case Right:
@@ -56,57 +51,87 @@ public class BlueFarAuto extends LinearOpMode {
                 drivebase.relativeTurn(-65, 0.4, telemetry);
                 drivebase.driveForward(7.0, 0.3, telemetry);
                 drivebase.driveForward(-7.0, 0.3, telemetry);
-                drivebase.absoluteTurn(0, 0.4, telemetry);
+                drivebase.relativeTurn(65, 0.4, telemetry);
                 drivebase.driveForward(26, 0.3, telemetry);
                 break;
             case Left:
+                drivebase.relativeTurn(65, 0.4, telemetry);
+                drivebase.driveForward(7.0, 0.4, telemetry);
+                drivebase.driveForward(-7.0, 0.3, telemetry);
+                drivebase.absoluteTurn(0, 0.4, telemetry);
                 drivebase.driveForward(26, 0.3, telemetry);
                 break;
             case Middle:
-                drivebase.driveForward(20, 0.25, telemetry);
-                drivebase.driveForward(4, 0.3, telemetry);
-                drivebase.absoluteTurn(180, 0.2, telemetry);
-                drivebase.driveForward(4, 0.4, telemetry);
-                drivebase.driveForward(-8, 0.4, telemetry);
+                drivebase.driveForward(15, 0.7, telemetry);
+                drivebase.driveForward(5, 0.2, telemetry);
+                drivebase.driveForward(2, 0.2, telemetry);
+                //Was 0.2
+                drivebase.absoluteTurn(180, 0.3, telemetry);
+                //Was 6.
+                drivebase.driveForward(6, 0.4, telemetry);
+                drivebase.driveForward(-6, 0.4, telemetry);
                 break;
         }
         // Score Pixel
         telemetry.update();
 
-        drivebase.absoluteTurn(90, 0.4, telemetry);
-        drivebase.driveForward(80, 0.5, telemetry);
-        sleep(4000); //1000 is a second.
-        drivebase.driveSideways(-30, 0.4, telemetry);
+        drivebase.absoluteTurn(90, 0.3, telemetry);
+        //Was 80
+        drivebase.driveForward(46, 0.7, telemetry);
+        telemetry.addData("Position", "1");
 
+//        if (side == CubeSide.Left) sleep(5000);
+
+        drivebase.driveSideways(-35, 0.4, telemetry);
+        telemetry.addData("Position", "Strafed to backboard.");
         camera.enableAprilTags();
+        telemetry.addData("Position", "Apriltags enabled.");
+
+        telemetry.update();
 
         switch (side) {
             case Left:
                 //Offset
-                drivebase.centerToAprilTag(14.0, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
-                drivebase.driveSideways(-7, 0.3, telemetry);
+                drivebase.driveSideways(-6, 0.3, telemetry);
+                drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
+                drivebase.driveSideways(-6, 0.3, telemetry);
+
                 //centerToApriltag.
                 break;
             case Middle:
-                drivebase.centerToAprilTag(14.0, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
+                drivebase.driveSideways(-6, 0.3, telemetry);
+                drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
+                drivebase.driveSideways(1, 0.3, telemetry);
 
                 //Center to Apriltag
                 break;
             case Right:
                 //Offset
-                drivebase.driveSideways(5, 0.3, telemetry);
-                drivebase.centerToAprilTag(14.0, camera.getTagById(Config.APRILTAGS.ID_BLUE_MIDDLE));
+                drivebase.driveSideways(7, 0.4, telemetry);
+                telemetry.addData("Position", "Strafed to right tag.");
+                drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_MIDDLE));
+                drivebase.driveSideways(1, 0.4, telemetry);
+                telemetry.addData("Position", "Centered to tag.");
                 //Center to Apriltag
                 break;
         }
 
-        drivebase.driveForward(8, 0.3, telemetry);
+        telemetry.update();
+
+        //Was 6.
+        drivebase.driveForward(6, 0.4, telemetry);
+        drivebase.driveForward(3, 0.3, telemetry);
 
         dropper.dropPixel();
-        drivebase.driveForward(-2, 0.5, telemetry);
+        telemetry.addData("Position", "Dropped pixel.");
+        drivebase.driveForward(-4, 0.5, telemetry);
+
+        telemetry.update();
 
         //Experimental
-        //drivebase.driveForward(-4, 0.5, telemetry);
-        //drivebase.driveSideways(46, 0.3, telemetry);
+        if (side == CubeSide.Middle || side == CubeSide.Right)
+        {
+            drivebase.driveSideways(24, 0.3, telemetry);
+        }
     }
 }
