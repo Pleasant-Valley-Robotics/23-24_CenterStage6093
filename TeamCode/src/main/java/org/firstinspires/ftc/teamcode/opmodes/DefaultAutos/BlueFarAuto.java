@@ -49,8 +49,8 @@ public class BlueFarAuto extends LinearOpMode {
 
                 //New code that might not work. Meant to be a mirror of left side. (Left side works).
                 drivebase.relativeTurn(-65, 0.4, telemetry);
-                drivebase.driveForward(7.0, 0.3, telemetry);
-                drivebase.driveForward(-7.0, 0.3, telemetry);
+                drivebase.driveForward(5.0, 0.3, telemetry);
+                drivebase.driveForward(-5.0, 0.3, telemetry);
                 drivebase.relativeTurn(65, 0.4, telemetry);
                 drivebase.driveForward(26, 0.3, telemetry);
                 break;
@@ -68,7 +68,8 @@ public class BlueFarAuto extends LinearOpMode {
                 //Was 0.2
                 drivebase.absoluteTurn(180, 0.3, telemetry);
                 //Was 6.
-                drivebase.driveForward(6, 0.4, telemetry);
+                drivebase.driveForward(5.5, 0.4, telemetry);
+                //Was -6.
                 drivebase.driveForward(-6, 0.4, telemetry);
                 break;
         }
@@ -101,7 +102,7 @@ public class BlueFarAuto extends LinearOpMode {
             case Middle:
                 drivebase.driveSideways(-6, 0.3, telemetry);
                 drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
-                drivebase.driveSideways(1, 0.3, telemetry);
+                drivebase.driveSideways(2, 0.3, telemetry);
 
                 //Center to Apriltag
                 break;
@@ -120,7 +121,7 @@ public class BlueFarAuto extends LinearOpMode {
 
         //Was 6.
         drivebase.driveForward(6, 0.4, telemetry);
-        drivebase.driveForward(3, 0.3, telemetry);
+        drivebase.driveForward(2, 0.3, telemetry);
 
         dropper.dropPixel();
         telemetry.addData("Position", "Dropped pixel.");
