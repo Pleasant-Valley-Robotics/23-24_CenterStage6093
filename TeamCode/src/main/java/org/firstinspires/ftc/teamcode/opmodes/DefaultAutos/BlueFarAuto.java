@@ -30,108 +30,82 @@ public class BlueFarAuto extends LinearOpMode {
         CubeSide side = camera.getStableCubePrediction(15);
         telemetry.addData("Side", side);
         telemetry.update();
-        telemetry.update();
 
         drivebase.driveForward(22, 0.7, telemetry);
         drivebase.driveForward(2, 0.2, telemetry);
         camera.disableDetection();
 
-
         switch (side) {
-            case Right:
-                //Code that we know works though it's not the most practical.
-//                drivebase.driveForward(20, 0.4, telemetry);
-//                drivebase.driveForward(3, 0.2, telemetry);
-//                drivebase.absoluteTurn(-140, 0.2, telemetry);
-//                drivebase.driveForward(11, 0.4, telemetry);
-//                drivebase.driveForward(-16, 0.4, telemetry);
-//                drivebase.relativeTurn(-40, 0.4, telemetry);
-
-                //New code that might not work. Meant to be a mirror of left side. (Left side works).
-                drivebase.relativeTurn(-65, 0.4, telemetry);
-                drivebase.driveForward(5.0, 0.3, telemetry);
-                drivebase.driveForward(-5.0, 0.3, telemetry);
-                drivebase.relativeTurn(65, 0.4, telemetry);
-                drivebase.driveForward(26, 0.3, telemetry);
-                break;
             case Left:
-                drivebase.relativeTurn(65, 0.4, telemetry);
-                drivebase.driveForward(7.0, 0.4, telemetry);
-                drivebase.driveForward(-7.0, 0.3, telemetry);
-                drivebase.absoluteTurn(0, 0.4, telemetry);
-                drivebase.driveForward(26, 0.3, telemetry);
+                drivebase.relativeTurn(65, 0.6, telemetry);
+
+                drivebase.driveForward(6, 0.5, telemetry);
+                drivebase.driveForward(-7, 0.5, telemetry);
+
+                drivebase.absoluteTurn(0, 0.6, telemetry);
+
+                drivebase.driveForward(26, 0.6, telemetry);
                 break;
             case Middle:
-                drivebase.driveForward(15, 0.7, telemetry);
-                drivebase.driveForward(5, 0.2, telemetry);
+                drivebase.driveForward(20, 0.7, telemetry);
                 drivebase.driveForward(2, 0.2, telemetry);
-                //Was 0.2
-                drivebase.absoluteTurn(180, 0.3, telemetry);
-                //Was 6.
-                drivebase.driveForward(5.5, 0.4, telemetry);
-                //Was -6.
-                drivebase.driveForward(-6, 0.4, telemetry);
+
+                drivebase.absoluteTurn(180, 0.6, telemetry);
+
+                drivebase.driveForward(6, 0.4, telemetry);
+                drivebase.driveForward(-7, 0.4, telemetry);
+                break;
+            case Right:
+                drivebase.relativeTurn(-65, 0.6, telemetry);
+
+                drivebase.driveForward(6, 0.5, telemetry);
+                drivebase.driveForward(-7, 0.5, telemetry);
+
+                drivebase.absoluteTurn(0, 0.6, telemetry);
+
+                drivebase.driveForward(26, 0.6, telemetry);
                 break;
         }
-        // Score Pixel
-        telemetry.update();
 
-        drivebase.absoluteTurn(90, 0.3, telemetry);
-        //Was 80
-        drivebase.driveForward(46, 0.7, telemetry);
-        telemetry.addData("Position", "1");
+        drivebase.absoluteTurn(90, 0.6, telemetry);
+        drivebase.driveForward(48, 0.7, telemetry);
 
-//        if (side == CubeSide.Left) sleep(5000);
-
-        drivebase.driveSideways(-35, 0.4, telemetry);
-        telemetry.addData("Position", "Strafed to backboard.");
+        drivebase.driveSideways(-18, 0.5, telemetry);
+        drivebase.driveSideways(-17, 0.5, telemetry);
         camera.enableAprilTags();
-        telemetry.addData("Position", "Apriltags enabled.");
 
-        telemetry.update();
 
         switch (side) {
             case Left:
-                //Offset
-                drivebase.driveSideways(-6, 0.3, telemetry);
-                drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
-                drivebase.driveSideways(-6, 0.3, telemetry);
+                drivebase.driveSideways(-6, 0.6, telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
+                drivebase.driveSideways(-6, 0.6, telemetry);
 
-                //centerToApriltag.
                 break;
             case Middle:
-                drivebase.driveSideways(-6, 0.3, telemetry);
-                drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
-                drivebase.driveSideways(2, 0.3, telemetry);
+                drivebase.driveSideways(-6, 0.6, telemetry);
+                drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_BLUE_LEFT));
+                drivebase.driveSideways(2, 0.6, telemetry);
 
-                //Center to Apriltag
                 break;
             case Right:
                 //Offset
-                drivebase.driveSideways(7, 0.4, telemetry);
-                telemetry.addData("Position", "Strafed to right tag.");
-                drivebase.centerToAprilTag(14, camera.getTagById(Config.APRILTAGS.ID_BLUE_MIDDLE));
-                drivebase.driveSideways(1, 0.4, telemetry);
-                telemetry.addData("Position", "Centered to tag.");
-                //Center to Apriltag
+                drivebase.centerToAprilTag(15, camera.getTagById(Config.APRILTAGS.ID_BLUE_MIDDLE));
+                drivebase.driveSideways(2, 0.6, telemetry);
                 break;
         }
 
         telemetry.update();
 
-        //Was 6.
         drivebase.driveForward(6, 0.4, telemetry);
         drivebase.driveForward(2, 0.3, telemetry);
 
         dropper.dropPixel();
-        telemetry.addData("Position", "Dropped pixel.");
         drivebase.driveForward(-4, 0.5, telemetry);
 
-        telemetry.update();
 
         //Experimental
-        if (side == CubeSide.Middle || side == CubeSide.Right)
-        {
+        if (side == CubeSide.Middle || side == CubeSide.Right) {
             drivebase.driveSideways(24, 0.3, telemetry);
         }
     }
