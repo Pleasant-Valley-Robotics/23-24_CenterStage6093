@@ -54,7 +54,7 @@ public class BlueCloseAuto extends LinearOpMode {
         drivebase.driveForward(-12, 0.5, telemetry);
         drivebase.relativeTurn(90, 0.5, telemetry);
 
-        drivebase.driveForward(30, 0.4, telemetry);
+        drivebase.driveForward(20, 0.4, telemetry);
 
         drivebase.absoluteTurn(90, 0.7, telemetry);
 
@@ -76,7 +76,7 @@ public class BlueCloseAuto extends LinearOpMode {
                 break;
         }
 
-        drivebase.driveForward(6, 0.3, telemetry);
+        drivebase.driveForward(6.5, 0.3, telemetry);
         drivebase.driveForward(2, 0.2, telemetry);
 
         pixelDropper.dropPixel();

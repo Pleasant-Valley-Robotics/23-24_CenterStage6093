@@ -54,7 +54,7 @@ public class RedCloseAuto extends LinearOpMode {
         drivebase.driveForward(-12, 0.5, telemetry);
         drivebase.relativeTurn(-90, 0.5, telemetry);
 
-        drivebase.driveForward(30, 0.4, telemetry);
+        drivebase.driveForward(20, 0.4, telemetry);
 
         drivebase.absoluteTurn(-90, 0.7, telemetry);
 
